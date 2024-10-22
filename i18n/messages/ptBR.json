@@ -1,0 +1,24 @@
+{
+  "pages": {
+    "login": {
+      "form": {
+        "emailInput": {
+          "label": "E-mail",
+          "validations": {
+            "required": "O email é obrigatório",
+            "email": "O email é inválido"
+          }
+        },
+        "passwordInput": {
+          "label": "Senha",
+          "validations": {
+            "required": "A senha é obrigatória",
+            "min": "Mínimo 8 caracteres",
+            "max": "Máximo 32 caracteres"
+          }
+        },
+        "submitButtonLabel": "Entrar"
+      }
+    }
+  }
+}

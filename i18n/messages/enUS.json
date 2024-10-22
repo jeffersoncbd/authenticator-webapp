@@ -1,0 +1,24 @@
+{
+  "pages": {
+    "login": {
+      "form": {
+        "emailInput": {
+          "label": "Email",
+          "validations": {
+            "required": "Email is required",
+            "email": "Invalid email address"
+          }
+        },
+        "passwordInput": {
+          "label": "Password",
+          "validations": {
+            "required": "Password is required",
+            "min": "Minimum 8 characters",
+            "max": "Maximum 32 characters"
+          }
+        },
+        "submitButtonLabel": "Log in"
+      }
+    }
+  }
+}
