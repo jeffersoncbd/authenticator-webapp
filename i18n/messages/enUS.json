@@ -19,6 +19,22 @@
         },
         "submitButtonLabel": "Log in"
       }
+    },
+    "dashboard": {
+      "title": "Dashboard"
+    },
+    "applications": {
+      "title": "Applications"
+    },
+    "logs": {
+      "title": "Logs"
+    }
+  },
+  "components": {
+    "menuDrawer": {
+      "dashboard": "Dashboard",
+      "applications": "Applications",
+      "logs": "Logs"
     }
   }
 }

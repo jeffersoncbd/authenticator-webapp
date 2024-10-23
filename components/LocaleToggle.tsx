@@ -1,14 +1,12 @@
 'use client'
 
-import { Link, Locale, locales, localesData, usePathname } from "@/i18n/routing"
+import { Link, Locale, locales, localesData } from "@/i18n/routing"
 import Image from "next/image"
 import { usePathname as useNavigationPathname } from "next/navigation"
 import { Button } from "./ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
 
 const LocaleToggle: React.FC = () => {
-    const pathName = usePathname()
-
     const locale = useNavigationPathname().split('/')[1] as Locale
 
     return (
@@ -20,7 +18,7 @@ const LocaleToggle: React.FC = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 {locales.map((locale) => (
-                    <Link key={locale} href={pathName} locale={locale}>
+                    <Link key={locale} href="/" locale={locale}>
                         <DropdownMenuItem >
                             <Image src={localesData[locale].flag} alt={locale} width={20} height={20} /> {localesData[locale].label}
                         </DropdownMenuItem>
