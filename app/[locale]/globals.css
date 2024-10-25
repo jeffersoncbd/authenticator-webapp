@@ -16,6 +16,10 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap');
 
+* {
+  user-select: none;
+}
+
 html,
 body {
   height: 100vh;

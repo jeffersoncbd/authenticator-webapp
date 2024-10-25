@@ -24,10 +24,12 @@ export function useApiService() {
       service.defaults.headers.Authorization = `Bearer ${token}`;
       service.interceptors.response.use(
         (response) => {
-          toast({
-            title: response.data.feedback,
-            style: { backgroundColor: "green" },
-          });
+          if (Boolean(response.data.feedback)) {
+            toast({
+              title: response.data.feedback,
+              style: { backgroundColor: "green" },
+            });
+          }
           return response;
         },
         (error) => {

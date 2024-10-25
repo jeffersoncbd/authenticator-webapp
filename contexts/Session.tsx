@@ -23,18 +23,20 @@ const SessionContextProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const pathName = usePathname()
     const { toast } = useToast()
 
-    const [token, setToken] = useState<null | string>(null)
+    const [token, setToken] = useState<null | string>()
 
     useEffect(() => {
         setToken(sessionStorage.getItem('token'))
     }, [])
 
     useEffect(() => {
-        if (Boolean(token) && pathName === '/') {
-            router.push('/dashboard')
-        }
-        if (!Boolean(token) && pathName !== '/') {
-            router.replace('/')
+        if (token !== undefined) {
+            if (Boolean(token) && pathName === '/') {
+                router.push('/dashboard')
+            }
+            if (!Boolean(token) && pathName !== '/') {
+                router.replace('/')
+            }
         }
     }, [token, router, pathName])
 
@@ -54,7 +56,7 @@ const SessionContextProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
 
     return (
-        <SessionContext.Provider value={{ token, startSession, authenticated: Boolean(token), endSession }}>
+        <SessionContext.Provider value={{ token: token || null, startSession, authenticated: Boolean(token), endSession }}>
             {children}
         </SessionContext.Provider>
     )

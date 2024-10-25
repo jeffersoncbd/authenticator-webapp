@@ -5,7 +5,6 @@ import { X, Zap } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { twMerge } from "tailwind-merge"
 import { montserratThin } from "./typography/fonts"
-import { H4 } from "./typography/headers"
 import { Button } from "./ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
 
@@ -38,18 +37,18 @@ const MenuDrawer: React.FC<Properties> = (properties) => {
                 />
             )}
             <Card className={twMerge(
-                "w-full max-w-[280px] h-[calc(100vh-2rem)]",
+                "w-full max-w-[240px] h-[calc(100vh-2rem)]",
                 "absolute z-50",
                 properties.open ? 'translate-x-0' : '-translate-x-[calc(100%+2.5rem)]',
                 'transition ease-in-out duration-300'
             )} onClick={(e) => e.stopPropagation()}>
                 <CardHeader>
                     <CardTitle className="flex justify-between">
-                        <H4 className={`${montserratThin.className} flex items-center`}>
+                        <span className={`${montserratThin.className} flex items-center`}>
                             Auth
                             <Zap size="24px" strokeWidth="1px" className="stroke-yellow-500 dark:stroke-yellow-300" />
                             Thor
-                        </H4>
+                        </span>
 
                         <Button variant="outline" size="icon" onClick={() => properties.onClose()}>
                             <X />

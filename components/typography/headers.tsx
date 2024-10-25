@@ -15,6 +15,18 @@ export const H1: React.FC<Header> = (properties) => {
     )
 }
 
+export const H2: React.FC<Header> = (properties) => {
+    return (
+        <h2
+            {...properties}
+            className={twMerge(
+                'scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0',
+                properties.className
+            )}
+        />
+    )
+}
+
 export const H3: React.FC<Header> = (properties) => {
     return (
         <h3
