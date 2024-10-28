@@ -2,6 +2,7 @@ import HeaderBar from "@/components/HeaderBar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import SessionContextProvider from "@/contexts/Session";
+import StoreProvider from "@/contexts/Store";
 import { Locale, routing } from "@/i18n/routing";
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
     title: "AuthTor",
     description: "",
 };
+
 
 export default async function RootLayout({
     children,
@@ -32,17 +34,19 @@ export default async function RootLayout({
             <body>
                 <NextIntlClientProvider messages={messages}>
                     <SessionContextProvider>
-                        <ThemeProvider
-                            attribute="class"
-                            defaultTheme="dark"
-                            enableSystem
-                        >
-                            <div className="h-screen flex flex-col">
-                                <HeaderBar />
-                                {children}
-                                <Toaster />
-                            </div>
-                        </ThemeProvider>
+                        <StoreProvider>
+                            <ThemeProvider
+                                attribute="class"
+                                defaultTheme="dark"
+                                enableSystem
+                            >
+                                <div className="h-screen flex flex-col">
+                                    <HeaderBar />
+                                    {children}
+                                    <Toaster />
+                                </div>
+                            </ThemeProvider>
+                        </StoreProvider>
                     </SessionContextProvider>
                 </NextIntlClientProvider>
             </body>
