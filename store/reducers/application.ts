@@ -1,22 +1,24 @@
 import { ApiServices } from "@/services/api";
 import { Application } from "@/services/api/interfaces";
+import { SideEffects } from "..";
 import { createReducer } from "../state";
 
 const updateApplications = createReducer(
   "update-applications",
-  (state, apiService: ApiServices) => {
+  (state, payload: { sideEffects: SideEffects; apiService: ApiServices }) => {
     state.loading = true;
-    apiService.applications
+    payload.apiService.applications
       .list()
       .then((applications) => {
-        console.log(applications);
-        // dispatchSideEffect({
-        //   type: "update-applications",
-        //   payload: applications,
-        // });
+        payload.sideEffects({
+          type: "update-applications",
+          payload: applications,
+        });
       })
       .catch(
-        apiService.defaultErrorHandler("Falha ao tentar listar aplicações")
+        payload.apiService.defaultErrorHandler(
+          "Falha ao tentar listar aplicações"
+        )
       );
   }
 );

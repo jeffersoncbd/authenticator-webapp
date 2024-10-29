@@ -50,6 +50,15 @@ export function initState<State>(initialState: State) {
             const { dispatch } = useContext(StoreContext);
             return (action: Actions) => dispatch(action);
         }
+        function useStoreSideEffects() {
+            const { dispatch } = useContext(StoreContext);
+            return (action: SideEffectsActions) =>
+                dispatch({
+                    type: `side-effect-${action.type}`,
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    payload: (action as unknown as any).payload
+                } as unknown as Actions);
+        }
 
         function useStoreSelects<T>(query: (state: State) => T): T {
             const { state } = useContext(StoreContext);
@@ -72,10 +81,6 @@ export function initState<State>(initialState: State) {
                 reducersMap[action.type](
                     newState,
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    // dispatchSideEffect: (action: SideEffectsActions) => dispatch({ type: `side-effect-${action.type}`, payload: (action as unknown as any).payload } as unknown as Actions)
-
-
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     (action as unknown as any).payload)
                 return newState
             }, initialState);
@@ -83,7 +88,7 @@ export function initState<State>(initialState: State) {
             return <StoreContext.Provider value={{ state, dispatch }}>{children}</StoreContext.Provider>;
         };
 
-        return { StoreProvider, useStoreActions, useStoreSelects }
+        return { StoreProvider, useStoreActions, useStoreSideEffects, useStoreSelects }
 
     }
 
