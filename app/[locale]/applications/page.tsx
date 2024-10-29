@@ -3,22 +3,24 @@
 import { H2 } from "@/components/typography/headers"
 import { Button } from "@/components/ui/button"
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { useStoreActions, useStoreSelects } from "@/contexts/Store"
+import { useApiService } from "@/services/api"
+import { useStoreActions, useStoreSelects } from "@/store"
 import { Check, Copy } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
 
 const Applications: React.FC = () => {
     const t = useTranslations('pages.applications')
+    const apiService = useApiService()
     const action = useStoreActions()
     const applications = useStoreSelects((store) => store.applications.list)
 
     const [copyId, setCopyId] = useState<null | string>(null)
 
     useEffect(() => {
-        action({ type: 'set-update-applications', payload: [{ id: '1', name: 'Teste' }] })
+        action({ type: 'update-applications', payload: apiService })
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [apiService])
 
     useEffect(() => {
         if (copyId !== null) {

@@ -1,14 +1,18 @@
-import { Application } from "@/services/api/interfaces";
-import { createReducer } from "../store";
+import { ApiServices } from "@/services/api";
+import { createReducer } from "..";
 
-export const updateApplications = createReducer(
+const updateApplications = createReducer(
   "update-applications",
-  () => {}
-);
-
-export const setUpdateApplications = createReducer(
-  "set-update-applications",
-  (state, payload: Application[]) => {
-    state.applications.list = payload;
+  (state, apiService: ApiServices) => {
+    apiService.applications
+      .list()
+      .then((applications) => {
+        state.applications.list = applications;
+      })
+      .catch(
+        apiService.defaultErrorHandler("Falha ao tentar listar aplicações")
+      );
   }
 );
+
+export const applicationsReducers = [updateApplications];
