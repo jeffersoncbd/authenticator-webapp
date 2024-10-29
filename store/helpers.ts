@@ -1,4 +1,4 @@
-import { SideEffectsActions } from "./reducers";
+import { SideEffectsActions } from ".";
 import { State } from "./state";
 
 type SideEffect = (action: SideEffectsActions) => void;

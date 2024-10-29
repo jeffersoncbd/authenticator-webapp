@@ -1,6 +1,5 @@
 import React from "react";
-import { StoreContext } from ".";
-import { Actions } from "./reducers";
+import { Actions, StoreContext } from ".";
 import { State } from "./state";
 
 export function useStoreActions() {
