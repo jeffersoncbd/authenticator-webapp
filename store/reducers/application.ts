@@ -1,6 +1,6 @@
 import { ApiServices } from "@/services/api";
 import { Application } from "@/services/api/interfaces";
-import { createReducer } from "..";
+import { createReducer } from "../helpers";
 
 const updateApplications = createReducer(
   "update-applications",
