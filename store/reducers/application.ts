@@ -1,10 +1,10 @@
 import { ApiServices } from "@/services/api";
 import { Application } from "@/services/api/interfaces";
-import { createReducer, dispatchSideEffect } from "..";
+import { createReducer } from "..";
 
 const updateApplications = createReducer(
   "update-applications",
-  (store, apiService: ApiServices) => {
+  (store, dispatchSideEffect, apiService: ApiServices) => {
     store.loading = true;
     apiService.applications
       .list()
@@ -22,7 +22,7 @@ const updateApplications = createReducer(
 
 const updateApplicationsSideEffect = createReducer(
   "update-applications",
-  (state, payload: Application[]) => {
+  (state, _, payload: Application[]) => {
     state.loading = false;
     state.applications.list = payload;
   }
