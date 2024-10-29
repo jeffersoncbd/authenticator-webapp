@@ -15,6 +15,17 @@ const service = axios.create({
   withCredentials: true,
 });
 
+export function createService<R, P = void>(
+  hasToken: boolean,
+  service: (parameters: P) => R
+): (parameters: P) => R {
+  if (hasToken) {
+    return service;
+  } else {
+    return () => new Promise((_, rejects) => rejects(new Error("void"))) as R;
+  }
+}
+
 export function useApiService() {
   const { toast } = useToast();
   const { token, authenticated, endSession } = useContext(SessionContext);
@@ -63,6 +74,9 @@ export function useApiService() {
     defaultErrorHandler: (title: string) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (error: any) => {
+        if (error.message === "void") {
+          return;
+        }
         if (error.response === undefined) {
           toast({
             title: "Ocorreu um erro inesperado",
@@ -74,6 +88,8 @@ export function useApiService() {
         toast({ title, description: error.response.data.feedback });
       };
     },
-    applications: applications(service),
+    applications: applications(service, Boolean(token)),
   };
 }
+
+export type ApiServices = ReturnType<typeof useApiService>;
