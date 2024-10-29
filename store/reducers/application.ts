@@ -4,8 +4,8 @@ import { createReducer } from "..";
 
 const updateApplications = createReducer(
   "update-applications",
-  (store, dispatchSideEffect, apiService: ApiServices) => {
-    store.loading = true;
+  ({ state, dispatchSideEffect }, apiService: ApiServices) => {
+    state.loading = true;
     apiService.applications
       .list()
       .then((applications) => {
@@ -22,7 +22,7 @@ const updateApplications = createReducer(
 
 const updateApplicationsSideEffect = createReducer(
   "update-applications",
-  (state, _, payload: Application[]) => {
+  ({ state }, payload: Application[]) => {
     state.loading = false;
     state.applications.list = payload;
   }
