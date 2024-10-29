@@ -1,6 +1,6 @@
 import { ApiServices } from "@/services/api";
 import { Application } from "@/services/api/interfaces";
-import { createReducer, createSideEffect, dispatchSideEffect } from "..";
+import { createReducer, dispatchSideEffect } from "..";
 
 const updateApplications = createReducer(
   "update-applications",
@@ -10,7 +10,7 @@ const updateApplications = createReducer(
       .list()
       .then((applications) => {
         dispatchSideEffect({
-          type: "side-effect-update-applications",
+          type: "update-applications",
           payload: applications,
         });
       })
@@ -20,7 +20,7 @@ const updateApplications = createReducer(
   }
 );
 
-const updateApplicationsSideEffect = createSideEffect(
+const updateApplicationsSideEffect = createReducer(
   "update-applications",
   (state, payload: Application[]) => {
     state.loading = false;

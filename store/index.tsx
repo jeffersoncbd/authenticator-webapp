@@ -32,12 +32,6 @@ export function createReducer<T extends string, P = undefined>(
     reducer,
   };
 }
-export function createSideEffect<T extends string, P = undefined>(
-  type: `${T}`,
-  reducer: Reducer<P>
-) {
-  return createReducer(`side-effect-${type}`, reducer)
-}
 
 const reducers = [...applicationsReducers]
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -64,7 +58,7 @@ reducers.forEach((item) => {
   reducersMap[item.action.type] = item.reducer
 })
 sideEffectsReducers.forEach((item) => {
-  reducersMap[item.action.type] = item.reducer
+  reducersMap[`side-effect-${item.action.type}`] = item.reducer
 })
 
 export function useStoreActions() {
@@ -88,7 +82,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return newState
   }, initialState);
 
-  dispatchSideEffect = (action) => dispatch(action)
+  dispatchSideEffect = (action) => dispatch({ type: `side-effect-${action.type}`, payload: action.payload } as unknown as SideEffectsActions)
 
   return <StoreContext.Provider value={{ state, dispatch }}>{children}</StoreContext.Provider>;
 };
