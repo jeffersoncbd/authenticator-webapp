@@ -1,4 +1,7 @@
+"use client";
+
 import { Application } from "@/services/api/interfaces";
+import { initState } from "../lib/simpleStore";
 
 export interface State {
   loading: boolean;
@@ -12,3 +15,5 @@ export const initialState: State = {
     list: [],
   },
 };
+
+export const { createReducer, mountStore } = initState(initialState);
