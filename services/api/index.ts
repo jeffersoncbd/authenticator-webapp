@@ -15,17 +15,6 @@ const service = axios.create({
   withCredentials: true,
 });
 
-export function createService<R, P = void>(
-  hasToken: boolean,
-  service: (parameters: P) => R
-): (parameters: P) => R {
-  if (hasToken) {
-    return service;
-  } else {
-    return () => new Promise((_, rejects) => rejects(new Error("void"))) as R;
-  }
-}
-
 export function useApiService() {
   const { toast } = useToast();
   const { token, authenticated, endSession } = useContext(SessionContext);
@@ -45,6 +34,7 @@ export function useApiService() {
         },
         (error) => {
           if (
+            error.response !== undefined &&
             error.response.status === 401 &&
             error.response.data.feedback ===
               "token has invalid claims: token is expired"
@@ -88,7 +78,7 @@ export function useApiService() {
         toast({ title, description: error.response.data.feedback });
       };
     },
-    applications: applications(service, Boolean(token)),
+    applications: applications(service),
   };
 }
 

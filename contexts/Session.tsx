@@ -2,7 +2,7 @@
 
 import { useToast } from "@/hooks/use-toast";
 import { usePathname, useRouter } from "@/i18n/routing";
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface ContextProperties {
     startSession: (token: string) => void
@@ -17,6 +17,21 @@ export const SessionContext = createContext<ContextProperties>({
     token: null,
     authenticated: false
 })
+
+export const SessionChecker: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const { token } = useContext(SessionContext)
+
+    if (!Boolean(token)) {
+        return (
+            <div className="flex-1 flex justify-center items-center">
+                carregando...
+            </div>
+        )
+    }
+
+    console.log(token)
+    return children
+}
 
 const SessionContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const router = useRouter()
