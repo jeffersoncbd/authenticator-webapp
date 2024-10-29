@@ -20,7 +20,7 @@ const Applications: React.FC = () => {
     useEffect(() => {
         action({ type: 'update-applications', payload: apiService })
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [apiService])
+    }, [])
 
     useEffect(() => {
         if (copyId !== null) {

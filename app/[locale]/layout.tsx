@@ -1,7 +1,7 @@
 import HeaderBar from "@/components/HeaderBar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
-import SessionContextProvider from "@/contexts/Session";
+import SessionContextProvider, { SessionChecker } from "@/contexts/Session";
 import { Locale, routing } from "@/i18n/routing";
 import { StoreProvider } from "@/store";
 import type { Metadata } from "next";
@@ -14,7 +14,6 @@ export const metadata: Metadata = {
     title: "AuthTor",
     description: "",
 };
-
 
 export default async function RootLayout({
     children,
@@ -42,7 +41,9 @@ export default async function RootLayout({
                             >
                                 <div className="h-screen flex flex-col">
                                     <HeaderBar />
-                                    {children}
+                                    <SessionChecker>
+                                        {children}
+                                    </SessionChecker>
                                     <Toaster />
                                 </div>
                             </ThemeProvider>
