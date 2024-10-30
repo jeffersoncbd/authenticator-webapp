@@ -16,4 +16,4 @@ export const initialState: State = {
   },
 };
 
-export const { createReducer, mountStore } = initState(initialState);
+export const { createReducer, createReducerWithSideEffect, mountStore } = initState(initialState);

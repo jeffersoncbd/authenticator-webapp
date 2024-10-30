@@ -1,11 +1,9 @@
 'use client'
 
-import { applicationsReducers, applicationsSideEffectsReducers } from "./reducers/application";
+import { applicationsReducersWithSideEffects } from "./reducers/application";
 import { mountStore } from "./state";
 
-export const { StoreProvider, useStoreActions, useStoreSideEffects, useStoreSelects } = mountStore(
-    [...applicationsReducers],
-    [...applicationsSideEffectsReducers]
+export const { StoreProvider, useStoreActions, useStoreSelects } = mountStore(
+    [],
+    [...applicationsReducersWithSideEffects]
 )
-
-export type SideEffects = ReturnType<typeof useStoreSideEffects>

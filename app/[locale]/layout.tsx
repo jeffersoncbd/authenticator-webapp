@@ -1,6 +1,7 @@
 import HeaderBar from "@/components/HeaderBar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
+import InitialActions from "@/contexts/InitialActions";
 import SessionContextProvider, { SessionChecker } from "@/contexts/Session";
 import { Locale, routing } from "@/i18n/routing";
 import { StoreProvider } from "@/store";
@@ -32,23 +33,24 @@ export default async function RootLayout({
         <html lang={locale}>
             <body>
                 <NextIntlClientProvider messages={messages}>
-                    <SessionContextProvider>
-                        <StoreProvider>
-                            <ThemeProvider
-                                attribute="class"
-                                defaultTheme="dark"
-                                enableSystem
-                            >
-                                <div className="h-screen flex flex-col">
-                                    <HeaderBar />
-                                    <SessionChecker>
+                    <ThemeProvider
+                        attribute="class"
+                        defaultTheme="dark"
+                        enableSystem
+                    >
+                        <SessionContextProvider>
+                            <SessionChecker>
+                                <StoreProvider>
+                                    <InitialActions />
+                                    <div className="h-screen flex flex-col">
+                                        <HeaderBar />
                                         {children}
-                                    </SessionChecker>
-                                    <Toaster />
-                                </div>
-                            </ThemeProvider>
-                        </StoreProvider>
-                    </SessionContextProvider>
+                                        <Toaster />
+                                    </div>
+                                </StoreProvider>
+                            </SessionChecker>
+                        </SessionContextProvider>
+                    </ThemeProvider>
                 </NextIntlClientProvider>
             </body>
         </html>

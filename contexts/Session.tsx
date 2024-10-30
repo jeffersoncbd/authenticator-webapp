@@ -20,8 +20,9 @@ export const SessionContext = createContext<ContextProperties>({
 
 export const SessionChecker: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { token } = useContext(SessionContext)
+    const pathName = usePathname()
 
-    if (!Boolean(token)) {
+    if (!Boolean(token) && pathName !== '/') {
         return (
             <div className="flex-1 flex justify-center items-center">
                 carregando...
@@ -29,7 +30,6 @@ export const SessionChecker: React.FC<{ children: React.ReactNode }> = ({ childr
         )
     }
 
-    console.log(token)
     return children
 }
 
