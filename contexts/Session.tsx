@@ -1,5 +1,6 @@
 'use client'
 
+import Loading from "@/components/Loading";
 import { useToast } from "@/hooks/use-toast";
 import { usePathname, useRouter } from "@/i18n/routing";
 import React, { createContext, useContext, useEffect, useState } from "react";
@@ -23,11 +24,7 @@ export const SessionChecker: React.FC<{ children: React.ReactNode }> = ({ childr
     const pathName = usePathname()
 
     if (!Boolean(token) && pathName !== '/') {
-        return (
-            <div className="flex-1 flex justify-center items-center">
-                carregando...
-            </div>
-        )
+        return <Loading className="h-screen flex justify-center items-center" />
     }
 
     return children

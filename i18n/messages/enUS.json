@@ -35,6 +35,7 @@
       "dashboard": "Dashboard",
       "applications": "Applications",
       "logs": "Logs"
-    }
+    },
+    "loading": { "label": "Loading" }
   }
 }
