@@ -33,7 +33,7 @@ const Applications: React.FC = () => {
             <H2 className="text-center">{t('title')}</H2>
 
             <div className="flex gap-4 justify-between">
-                <Button size="icon" onClick={() => action({ type: 'update-applications', payload: apiService })}>
+                <Button size="icon" onClick={() => action({ type: 'update-applications', payload: { apiService } })}>
                     <RefreshCcw />
                 </Button>
                 <Button className="flex-1 min-[350px]:flex-none min-[350px]:w-[200px]">Adicionar</Button>

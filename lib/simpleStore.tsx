@@ -5,67 +5,80 @@ import { createContext, useContext, useReducer } from "react";
 
 export function initState<State>(initialState: State) {
 
-    type SideEffect<P> = (
+    type SideEffectHandler<P> = (
         state: State,
         payload: P
     ) => void;
-    type Reducer<P, SEP = undefined> = (
+    type SideEffect<T extends string, SEP = undefined> = {
+        type: `${T}`,
+        reducer: SideEffectHandler<SEP>,
+        action: SEP extends undefined ? { type: `${T}` } : { type: `${T}`; payload: SEP }
+    }
+    type ReducerHandler<P, SEP = undefined> = (
         store: {
             state: State,
             sideEffect: (payload: SEP) => void
         },
         payload: P
     ) => void;
+    type Reducer<T extends string, P, SE = undefined, SEP = undefined> = {
+        type: `${T}`,
+        reducer: ReducerHandler<P, SEP>,
+        sideEffect: SE
+    }
 
     function createReducer<T extends string, P>(
         type: `${T}`,
-        reducer: Reducer<P>,
+        reducer: ReducerHandler<P>,
     ): {
         action: P extends undefined ? { type: `${T}` } : { type: `${T}`; payload: P };
-        reducer: Reducer<P>;
+        reducer: Reducer<T, P>;
     } {
         return {
             action: { type, payload: null } as unknown as P extends undefined
                 ? { type: `${T}` }
                 : { type: `${T}`; payload: P },
-            reducer,
+            reducer: { type, reducer, sideEffect: undefined },
         };
     }
 
     function createReducerWithSideEffect<T extends string, P, SEP>(
         type: `${T}`,
-        sideEffect: (state: State, payload: SEP) => void,
-        reducer: Reducer<P, SEP>,
+        sideEffect: SideEffectHandler<SEP>,
+        reducer: ReducerHandler<P, SEP>,
     ): {
         action: P extends undefined ? { type: `${T}` } : { type: `${T}`; payload: P };
-        reducer: Reducer<P, SEP>;
-        sideEffectAction: SEP extends undefined ? { type: `${T}` } : { type: `${T}`; payload: SEP };
-        sideEffect: (state: State, payload: SEP) => void
+        reducer: Reducer<T, P, SideEffect<T, SEP>, SEP>
     } {
         return {
             action: { type, payload: null } as unknown as P extends undefined
                 ? { type: `${T}` }
                 : { type: `${T}`; payload: P },
-            reducer,
-            sideEffectAction: { type, payload: null } as unknown as SEP extends undefined
-                ? { type: `${T}` }
-                : { type: `${T}`; payload: SEP },
-            sideEffect
+            reducer: {
+                type,
+                reducer,
+                sideEffect: {
+                    type,
+                    reducer: sideEffect,
+                    action: { type, payload: null } as unknown as SEP extends undefined
+                        ? { type: `${T}` }
+                        : { type: `${T}`; payload: SEP },
+                }
+            },
         };
     }
 
-    function mountStore<T extends string, P, SEP>(
-        reducers: ReturnType<typeof createReducer<T, P>>[],
-        sideEffects: ReturnType<typeof createReducerWithSideEffect<T, P, SEP>>[]
+    function mountStore<
+        R extends { type: string, reducer: ReducerHandler<any, any> },
+        A extends { type: string },
+        SE extends { type: string, reducer: SideEffectHandler<any> }
+    >(
+        reducers: R[],
+        actions: A[],
+        sideEffects: SE[]
     ) {
-
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const reducerActions = reducers.map((r) => r.action);
-        type ReducerActions = (typeof reducerActions)[number];
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const sideEffectActions = sideEffects.map((r) => r.sideEffectAction);
-        type SideEffectActions = (typeof sideEffectActions)[number];
-        type Actions = ReducerActions | SideEffectActions;
+        type Actions = typeof actions[number]
 
         const StoreContext = createContext<{
             state: State;
@@ -85,14 +98,13 @@ export function initState<State>(initialState: State) {
             return query(state);
         }
 
-        const reducersMap: Record<string, Reducer<P>> = {};
-        const sideEffectsMap: Record<string, SideEffect<SEP>> = {};
-        reducers.forEach((item) => {
-            reducersMap[item.action.type] = item.reducer;
+        const reducersMap: Record<string, ReducerHandler<any>> = {};
+        const sideEffectsMap: Record<string, SideEffectHandler<any>> = {};
+        reducers.forEach((r) => {
+            reducersMap[r.type] = r.reducer;
         });
-        sideEffects.forEach((item) => {
-            reducersMap[item.action.type] = item.reducer as Reducer<P>;
-            sideEffectsMap[`side-effect-${item.action.type}`] = item.sideEffect;
+        sideEffects.forEach((se) => {
+            sideEffectsMap[`side-effect-${se.type}`] = se.reducer;
         });
 
         const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -101,7 +113,7 @@ export function initState<State>(initialState: State) {
                 if (!action.type.startsWith('side-effect-')) {
                     reducersMap[action.type]({
                         state, sideEffect: (payload) => {
-                            dispatch({ type: `side-effect-${action.type}`, payload } as Actions)
+                            dispatch({ type: `side-effect-${action.type}`, payload } as unknown as Actions)
                         }
                     }, (action as unknown as any).payload)
                 } else {

@@ -2,16 +2,20 @@
 
 import { useApiService } from "@/services/api"
 import { useStoreActions } from "@/store"
-import { useEffect } from "react"
+import { useContext, useEffect } from "react"
+import { SessionContext } from "./Session"
 
 const InitialActions: React.FC = () => {
+    const { authenticated } = useContext(SessionContext)
     const apiService = useApiService()
     const action = useStoreActions()
 
     useEffect(() => {
-        action({ type: 'update-applications', payload: apiService })
+        if (authenticated) {
+            action({ type: 'update-applications', payload: { apiService } })
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [authenticated])
 
     return null
 }

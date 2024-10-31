@@ -8,7 +8,7 @@ const updateApplications = createReducerWithSideEffect(
     state.loading = false;
     state.applications.list = payload;
   },
-  ({ state, sideEffect }, apiService: ApiServices) => {
+  ({ state, sideEffect }, { apiService }: { apiService: ApiServices }) => {
     state.loading = true;
     apiService.applications
       .list()
@@ -19,4 +19,4 @@ const updateApplications = createReducerWithSideEffect(
   }
 );
 
-export const applicationsReducersWithSideEffects = [updateApplications];
+export const applicationsReducers = [updateApplications];
