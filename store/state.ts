@@ -1,7 +1,7 @@
 "use client";
 
 import { Application } from "@/services/api/interfaces";
-import { initState } from "../lib/simpleStore";
+import { initState } from "@jeff.carlosbd/nano-store";
 
 export interface State {
   loading: boolean;
@@ -16,4 +16,5 @@ export const initialState: State = {
   },
 };
 
-export const { createReducer, createReducerWithSideEffect, mountStore } = initState(initialState);
+export const { createReducer, createReducerWithSideEffect, mountStore } =
+  initState(initialState);
