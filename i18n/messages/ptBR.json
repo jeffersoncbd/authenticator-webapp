@@ -24,7 +24,18 @@
       "title": "Dashboard"
     },
     "applications": {
-      "title": "Aplicações"
+      "title": "Aplicações",
+      "new": {
+        "title": "Adicionar aplicação",
+        "nameInput": {
+          "label": "Nome da aplicação",
+          "validations": {
+            "required": "O nome da aplicação é obrigatório."
+          }
+        },
+        "submitButtonLabel": "Adicionar aplicação",
+        "possibleErrorTitle": "Falha ao tentar adicionar aplicação"
+      }
     },
     "logs": {
       "title": "Logs"
@@ -36,6 +47,8 @@
       "applications": "Aplicações",
       "logs": "Logs"
     },
-    "loading": { "label": "Carregando" }
+    "loading": {
+      "label": "Carregando"
+    }
   }
 }
