@@ -6,6 +6,7 @@ import axios from "axios";
 import { useContext, useEffect } from "react";
 import { applications } from "./applications";
 import { LoginCredentials, LoginResponse } from "./interfaces";
+import { useStoreActions } from "@/store";
 
 const service = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -21,6 +22,7 @@ const cancelationToken = 'Cancel repeated request'
 export function useApiService() {
   const { toast } = useToast();
   const { token, authenticated, endSession } = useContext(SessionContext);
+  const action = useStoreActions()
 
   useEffect(() => {
     if (authenticated) {
@@ -80,6 +82,7 @@ export function useApiService() {
     defaultErrorHandler: (title: string) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (error: any) => {
+        action({ type: 'set-loading', payload: { loading: false } })
         if (error.message === "void" || error.message === cancelationToken) {
           return;
         }
