@@ -15,6 +15,9 @@ const service = axios.create({
   withCredentials: true,
 });
 
+const pendingRequests = new Map()
+const cancelationToken = 'Cancel repeated request'
+
 export function useApiService() {
   const { toast } = useToast();
   const { token, authenticated, endSession } = useContext(SessionContext);
@@ -22,6 +25,19 @@ export function useApiService() {
   useEffect(() => {
     if (authenticated) {
       service.defaults.headers.Authorization = `Bearer ${token}`;
+      service.interceptors.request.use(
+        (config) => {
+          const requestIdentifier = `${config.url}_${config.method}`;
+          if (pendingRequests.has(requestIdentifier)) {
+            const cancelTokenSource = pendingRequests.get(requestIdentifier);
+            cancelTokenSource.cancel(cancelationToken);
+          }
+          const newCancelTokenSource = axios.CancelToken.source();
+          config.cancelToken = newCancelTokenSource.token;
+          pendingRequests.set(requestIdentifier, newCancelTokenSource);
+          return config;
+        }
+      )
       service.interceptors.response.use(
         (response) => {
           if (Boolean(response.data.feedback)) {
@@ -37,7 +53,7 @@ export function useApiService() {
             error.response !== undefined &&
             error.response.status === 401 &&
             error.response.data.feedback ===
-              "token has invalid claims: token is expired"
+            "token has invalid claims: token is expired"
           ) {
             endSession();
           }
@@ -64,7 +80,7 @@ export function useApiService() {
     defaultErrorHandler: (title: string) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (error: any) => {
-        if (error.message === "void") {
+        if (error.message === "void" || error.message === cancelationToken) {
           return;
         }
         if (error.response === undefined) {
