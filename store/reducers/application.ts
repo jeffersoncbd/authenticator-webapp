@@ -2,13 +2,33 @@ import { ApiServices } from "@/services/api";
 import { Application } from "@/services/api/interfaces";
 import { createReducerWithSideEffect } from "../state";
 
+const addApplication = createReducerWithSideEffect(
+  "add-application",
+  (state, payload: Application) => {
+    state.applications.list.push(payload)
+    state.loading = false
+  },
+  (
+    { state, sideEffect },
+    { apiService, name, possibleErrorTitle }: { apiService: ApiServices, name: string, possibleErrorTitle: string }
+  ) => {
+    state.loading = true
+    apiService.applications.save({ name })
+      .then(({ id }) => sideEffect({ id, name }))
+      .catch(apiService.defaultErrorHandler(possibleErrorTitle))
+  }
+)
+
 const updateApplications = createReducerWithSideEffect(
   "update-applications",
   (state, payload: Application[]) => {
     state.loading = false;
     state.applications.list = payload;
   },
-  ({ state, sideEffect }, { apiService }: { apiService: ApiServices }) => {
+  (
+    { state, sideEffect },
+    { apiService }: { apiService: ApiServices }
+  ) => {
     state.loading = true;
     apiService.applications
       .list()
@@ -19,4 +39,4 @@ const updateApplications = createReducerWithSideEffect(
   }
 );
 
-export const applicationsReducers = [updateApplications];
+export const applicationsReducers = [addApplication, updateApplications];
