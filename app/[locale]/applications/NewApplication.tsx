@@ -12,11 +12,7 @@ import { useStoreActions } from "@/store"
 import { useApiService } from "@/services/api"
 import { useRef } from "react"
 
-interface Properties {
-  teste: 'string'
-}
-
-const NewApplication: React.FC<Properties> = () => {
+const NewApplication: React.FC = () => {
   const t = useTranslations('pages.applications.new')
   const action = useStoreActions()
   const apiService = useApiService()
