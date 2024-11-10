@@ -10,6 +10,7 @@ import { Check, Copy, RefreshCcw } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
 import NewApplication from "./NewApplication"
+import PageContainer from "@/components/PageContainer"
 
 const Applications: React.FC = () => {
   const t = useTranslations('pages.applications')
@@ -30,8 +31,7 @@ const Applications: React.FC = () => {
   }, [copyId])
 
   return (
-    <div className="flex flex-col gap-4 px-4 w-full max-w-[1000px] mx-auto">
-      <H2 className="text-center">{t('title')}</H2>
+    <PageContainer title={t('title')}>
 
       <div className="flex gap-4 justify-between">
         <Button size="icon" onClick={() => action({ type: 'update-applications', payload: { apiService } })}>
@@ -48,7 +48,7 @@ const Applications: React.FC = () => {
             </CardTitle>
             <CardDescription className="flex justify-center">
               <span className="cursor-pointer flex items-center gap-2 text-[10px] min-[380px]:text-sm" onClick={() => setCopyId(application.id)}>
-                {application.id} {copyId === null
+                {application.id} {copyId !== application.id
                   ? <Copy size={16} />
                   : <Check size={16} />}
               </span>
@@ -56,7 +56,8 @@ const Applications: React.FC = () => {
           </CardHeader>
         </Card>
       ))}
-    </div>
+
+    </PageContainer>
   )
 }
 
