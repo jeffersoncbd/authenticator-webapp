@@ -42,8 +42,8 @@ const Applications: React.FC = () => {
       </div>
 
       {loading ? <Loading className="mt-10 flex justify-center items-center" /> : applications.map((application) => (
-        <Link href={`/applications/${application.id}`}>
-          <Card key={application.id} className="py-0">
+        <Link key={application.id} href={`/applications/${application.id}`}>
+          <Card className="py-0">
             <CardHeader className="py-2">
               <CardTitle className="text-center">
                 {application.name}
