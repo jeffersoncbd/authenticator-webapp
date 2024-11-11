@@ -11,6 +11,7 @@ import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
 import NewApplication from "./NewApplication"
 import PageContainer from "@/components/PageContainer"
+import { Link } from "@/i18n/routing"
 
 const Applications: React.FC = () => {
   const t = useTranslations('pages.applications')
@@ -41,23 +42,26 @@ const Applications: React.FC = () => {
       </div>
 
       {loading ? <Loading className="mt-10 flex justify-center items-center" /> : applications.map((application) => (
-        <Card key={application.id} className="py-0">
-          <CardHeader className="py-2">
-            <CardTitle className="text-center">
-              {application.name}
-            </CardTitle>
-            <CardDescription className="flex justify-center">
-              <span className="cursor-pointer flex items-center gap-2 text-[10px] min-[380px]:text-sm" onClick={() => setCopyId(application.id)}>
-                {application.id} {copyId !== application.id
-                  ? <Copy size={16} />
-                  : <Check size={16} />}
-              </span>
-            </CardDescription>
-          </CardHeader>
-        </Card>
-      ))}
+        <Link href={`/applications/${application.id}`}>
+          <Card key={application.id} className="py-0">
+            <CardHeader className="py-2">
+              <CardTitle className="text-center">
+                {application.name}
+              </CardTitle>
+              <CardDescription className="flex justify-center">
+                <span className="cursor-pointer flex items-center gap-2 text-[10px] min-[380px]:text-sm" onClick={() => setCopyId(application.id)}>
+                  {application.id} {copyId !== application.id
+                    ? <Copy size={16} />
+                    : <Check size={16} />}
+                </span>
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </Link>
+      ))
+      }
 
-    </PageContainer>
+    </PageContainer >
   )
 }
 
