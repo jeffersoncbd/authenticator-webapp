@@ -22,8 +22,8 @@ const addApplication = createReducerWithSideEffect(
 const updateApplications = createReducerWithSideEffect(
   "update-applications",
   (state, payload: Application[]) => {
-    state.loading = false;
     state.applications.list = payload;
+    state.loading = false;
   },
   (
     { state, sideEffect },

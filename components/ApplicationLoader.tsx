@@ -28,8 +28,6 @@ const ApplicationLoader: React.FC<Properties> = ({ children }) => {
     return <Loading className="h-screen flex justify-center items-center" />
   }
 
-  console.log('ApplicationLoader', authenticated, pathName, loading)
-
   return children
 }
 
