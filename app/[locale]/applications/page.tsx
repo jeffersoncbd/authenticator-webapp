@@ -49,7 +49,13 @@ const Applications: React.FC = () => {
                 {application.name}
               </CardTitle>
               <CardDescription className="flex justify-center">
-                <span className="cursor-pointer flex items-center gap-2 text-[10px] min-[380px]:text-sm" onClick={() => setCopyId(application.id)}>
+                <span
+                  className="cursor-pointer flex items-center gap-2 text-[10px] min-[380px]:text-sm"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setCopyId(application.id)
+                  }}
+                >
                   {application.id} {copyId !== application.id
                     ? <Copy size={16} />
                     : <Check size={16} />}
