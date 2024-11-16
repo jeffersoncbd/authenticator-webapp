@@ -6,7 +6,7 @@
           "label": "Email",
           "validations": {
             "required": "Email is required",
-            "email": "Invalid email address"
+            "email": "Invalid email"
           }
         },
         "passwordInput": {
@@ -17,14 +17,25 @@
             "max": "Maximum 32 characters"
           }
         },
-        "submitButtonLabel": "Log in"
+        "submitButtonLabel": "Login"
       }
     },
     "dashboard": {
       "title": "Dashboard"
     },
     "applications": {
-      "title": "Applications"
+      "title": "Applications",
+      "new": {
+        "title": "Add Application",
+        "nameInput": {
+          "label": "Application Name",
+          "validations": {
+            "required": "Application name is required."
+          }
+        },
+        "submitButtonLabel": "Add Application",
+        "possibleErrorTitle": "Failed to add application"
+      }
     },
     "logs": {
       "title": "Logs"
@@ -34,8 +45,11 @@
     "menuDrawer": {
       "dashboard": "Dashboard",
       "applications": "Applications",
-      "logs": "Logs"
+      "logs": "Logs",
+      "logoutButton": "Logout"
     },
-    "loading": { "label": "Loading" }
+    "loading": {
+      "label": "Loading"
+    }
   }
 }
