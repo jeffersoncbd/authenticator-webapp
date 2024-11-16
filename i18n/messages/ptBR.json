@@ -45,7 +45,8 @@
     "menuDrawer": {
       "dashboard": "Dashboard",
       "applications": "Aplicações",
-      "logs": "Logs"
+      "logs": "Logs",
+      "logoutButton": "Sair"
     },
     "loading": {
       "label": "Carregando"

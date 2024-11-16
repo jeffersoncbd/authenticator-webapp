@@ -2,6 +2,7 @@
 
 import Loading from "@/components/Loading"
 import PageContainer from "@/components/PageContainer"
+import { Card } from "@/components/ui/card"
 import { useRouter } from "@/i18n/routing"
 import { useStoreSelects } from "@/store"
 import { useTranslations } from "next-intl"
@@ -9,9 +10,10 @@ import { useEffect, useMemo } from "react"
 
 interface Properties {
   params: { applicationID: string }
+  children: React.ReactNode
 }
 
-const Application: React.FC<Properties> = ({ params: { applicationID } }) => {
+const Application: React.FC<Properties> = ({ params: { applicationID }, children }) => {
   const router = useRouter()
   const t = useTranslations('pages.applications')
 
@@ -39,6 +41,7 @@ const Application: React.FC<Properties> = ({ params: { applicationID } }) => {
         { label: application.name }
       ]}
     >
+      {children}
     </PageContainer>
   )
 }
