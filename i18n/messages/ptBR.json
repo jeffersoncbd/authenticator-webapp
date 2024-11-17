@@ -25,6 +25,7 @@
     },
     "applications": {
       "title": "Aplicações",
+      "possibleErrorTitleOnList": "Falha ao tentar listar aplicações",
       "new": {
         "title": "Adicionar aplicação",
         "nameInput": {
@@ -39,7 +40,8 @@
       "view": {
         "tabs": {
           "groups": {
-            "title": "Grupos"
+            "title": "Grupos",
+            "possibleErrorTitleOnList": "Falha ao tentar listar grupos da aplicação"
           },
           "users": {
             "title": "Usuários"

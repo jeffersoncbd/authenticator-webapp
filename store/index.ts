@@ -1,7 +1,6 @@
 "use client";
 
 import { allReducers } from "./reducers";
-import { applicationsReducers } from "./reducers/application";
 import { mountStore } from "./state";
 
 const actions = allReducers.map((r) => r.action);

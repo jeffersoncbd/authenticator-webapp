@@ -1,13 +1,12 @@
 'use client'
 
-import Loading from "@/components/Loading"
 import PageContainer from "@/components/PageContainer"
-import { Card } from "@/components/ui/card"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { usePathname, useRouter } from "@/i18n/routing"
-import { useStoreSelects } from "@/store"
+import { useApiService } from "@/services/api"
+import { useStoreActions, useStoreSelects } from "@/store"
 import { useTranslations } from "next-intl"
-import { useEffect, useMemo } from "react"
+import { useEffect } from "react"
 
 interface Properties {
   params: { applicationID: string }
@@ -18,17 +17,20 @@ const Application: React.FC<Properties> = ({ params: { applicationID }, children
   const router = useRouter()
   const t = useTranslations('pages.applications')
   const pathname = usePathname()
+  const action = useStoreActions()
+  const apiService = useApiService()
 
-  const applications = useStoreSelects(s => s.applications.list)
+  const application = useStoreSelects(s => s.applications?.[applicationID])
 
-  let application = useMemo(() =>
-    applications.find((a) => a.id === applicationID),
-    [JSON.stringify(applications), applicationID]
-  )
-
-  if (applications.length === 0) {
-    return <Loading />
-  }
+  useEffect(() => {
+    if (application !== undefined && application.groups === undefined) {
+      action({
+        type: 'update-groups-application',
+        payload: { applicationID, apiService, possibleErrorTitle: t('view.tabs.groups.possibleErrorTitleOnList') }
+      })
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [application])
 
   if (application === undefined) {
     router.replace('/applications')

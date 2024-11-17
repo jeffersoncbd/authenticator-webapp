@@ -1,7 +1,6 @@
 'use client'
 
 import Loading from "@/components/Loading"
-import { H2 } from "@/components/typography/headers"
 import { Button } from "@/components/ui/button"
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useApiService } from "@/services/api"
@@ -18,7 +17,7 @@ const Applications: React.FC = () => {
   const action = useStoreActions()
   const apiService = useApiService()
   const loading = useStoreSelects((store) => store.loading)
-  const applications = useStoreSelects((store) => store.applications.list)
+  const applications = useStoreSelects((store) => store.applications)
 
   const [copyId, setCopyId] = useState<null | string>(null)
 
@@ -35,38 +34,42 @@ const Applications: React.FC = () => {
     <PageContainer title={t('title')}>
 
       <div className="flex gap-4 justify-between">
-        <Button size="icon" onClick={() => action({ type: 'update-applications', payload: { apiService } })}>
+        <Button size="icon" onClick={() => action({
+          type: 'update-applications',
+          payload: { apiService, possibleErrorTitle: t('possibleErrorTitleOnList') }
+        })}>
           <RefreshCcw />
         </Button>
         <NewApplication />
       </div>
 
-      {loading ? <Loading className="mt-10 flex justify-center items-center" /> : applications.map((application) => (
-        <Link key={application.id} href={`/applications/${application.id}/groups`}>
-          <Card className="py-0">
-            <CardHeader className="py-2">
-              <CardTitle className="text-center">
-                {application.name}
-              </CardTitle>
-              <CardDescription className="flex justify-center">
-                <span
-                  className="cursor-pointer flex items-center gap-2 text-[10px] min-[380px]:text-sm"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    setCopyId(application.id)
-                  }}
-                >
-                  {application.id} {copyId !== application.id
-                    ? <Copy size={16} />
-                    : <Check size={16} />}
-                </span>
-              </CardDescription>
-            </CardHeader>
-          </Card>
-        </Link>
-      ))
-      }
-
+      {loading || applications === undefined
+        ? <Loading className="mt-10 flex justify-center items-center" />
+        : Object.values(applications).map((application) => (
+          <Link key={application.id} href={`/applications/${application.id}/groups`}>
+            <Card className="py-0">
+              <CardHeader className="py-2">
+                <CardTitle className="text-center">
+                  {application.name}
+                </CardTitle>
+                <CardDescription className="flex justify-center">
+                  <span
+                    className="cursor-pointer flex items-center gap-2 text-[10px] min-[380px]:text-sm"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setCopyId(application.id)
+                    }}
+                  >
+                    {application.id} {copyId !== application.id
+                      ? <Copy size={16} />
+                      : <Check size={16} />}
+                  </span>
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </Link>
+        ))
+      },l
     </PageContainer >
   )
 }

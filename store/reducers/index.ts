@@ -1,5 +1,6 @@
 import { createReducer } from "../state";
-import { applicationsReducers } from "./application";
+import { applicationsReducers } from "./applications";
+import { groupsReducers } from "./groups";
 
 const setLoading = createReducer(
   "set-loading",
@@ -8,5 +9,5 @@ const setLoading = createReducer(
   }
 )
 
-export const allReducers = [setLoading, ...applicationsReducers]
+export const allReducers = [setLoading, ...applicationsReducers, ...groupsReducers]
 

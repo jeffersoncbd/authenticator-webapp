@@ -5,7 +5,9 @@ import { createReducerWithSideEffect } from "../state";
 const addApplication = createReducerWithSideEffect(
   "add-application",
   (state, payload: Application) => {
-    state.applications.list.push(payload)
+    if (state.applications !== undefined) {
+      state.applications[payload.id] = payload
+    }
     state.loading = false
   },
   (
@@ -22,19 +24,21 @@ const addApplication = createReducerWithSideEffect(
 const updateApplications = createReducerWithSideEffect(
   "update-applications",
   (state, payload: Application[]) => {
-    state.applications.list = payload;
+    const applications: Record<string, Application> = {}
+    payload.forEach((a) => (applications[a.id] = a));
+    state.applications = applications
     state.loading = false;
   },
   (
     { state, sideEffect },
-    { apiService }: { apiService: ApiServices }
+    { apiService, possibleErrorTitle }: { apiService: ApiServices, possibleErrorTitle: string }
   ) => {
     state.loading = true;
     apiService.applications
       .list()
       .then(sideEffect)
       .catch(
-        apiService.defaultErrorHandler("Falha ao tentar listar aplicações")
+        apiService.defaultErrorHandler(possibleErrorTitle)
       );
   }
 );
