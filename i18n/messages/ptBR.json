@@ -38,8 +38,12 @@
       },
       "view": {
         "tabs": {
-          "groups": "Grupos",
-          "users": "Usuários"
+          "groups": {
+            "title": "Grupos"
+          },
+          "users": {
+            "title": "Usuários"
+          }
         }
       }
     },

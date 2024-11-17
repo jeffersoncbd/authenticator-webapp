@@ -45,8 +45,8 @@ const Application: React.FC<Properties> = ({ params: { applicationID }, children
     >
       <Tabs defaultValue={pathname.split('/')[3]} onValueChange={router.replace}>
         <TabsList>
-          <TabsTrigger value="groups">{t('view.tabs.groups')}</TabsTrigger>
-          <TabsTrigger value="users">{t('view.tabs.users')}</TabsTrigger>
+          <TabsTrigger value="groups">{t('view.tabs.groups.title')}</TabsTrigger>
+          <TabsTrigger value="users">{t('view.tabs.users.title')}</TabsTrigger>
         </TabsList>
       </Tabs>
       {children}
