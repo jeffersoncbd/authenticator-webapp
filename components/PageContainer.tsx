@@ -1,6 +1,7 @@
 import { Link } from "@/i18n/routing"
 import { H2 } from "./typography/headers"
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "./ui/breadcrumb"
+import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbSeparator } from "./ui/breadcrumb"
+import React from "react"
 
 interface BreadcrumbData {
   label: string
@@ -20,8 +21,8 @@ const PageContainer: React.FC<Properties> = (properties) => {
         <Breadcrumb>
           <BreadcrumbList>
             {properties.breadcrumb.map((item, i) => (
-              <>
-                <BreadcrumbItem key={item.label}>
+              <React.Fragment key={`${item.label}-${item.href}`}>
+                <BreadcrumbItem>
                   {item.href === undefined ? item.label : (
                     <Link href={item.href} className="hover:text-white">
                       {item.label}
@@ -29,9 +30,9 @@ const PageContainer: React.FC<Properties> = (properties) => {
                   )}
                 </BreadcrumbItem>
                 {properties.breadcrumb?.length !== i + 1 && (
-                  <BreadcrumbSeparator key={`${item.label}-separator`} />
+                  <BreadcrumbSeparator />
                 )}
-              </>
+              </React.Fragment>
             ))}
           </BreadcrumbList>
         </Breadcrumb>
