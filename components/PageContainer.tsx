@@ -21,17 +21,15 @@ const PageContainer: React.FC<Properties> = (properties) => {
           <BreadcrumbList>
             {properties.breadcrumb.map((item, i) => (
               <>
-                <BreadcrumbItem>
+                <BreadcrumbItem key={item.label}>
                   {item.href === undefined ? item.label : (
-                    <Link href={item.href}>
-                      <BreadcrumbLink>
-                        {item.label}
-                      </BreadcrumbLink>
+                    <Link href={item.href} className="hover:text-white">
+                      {item.label}
                     </Link>
                   )}
                 </BreadcrumbItem>
                 {properties.breadcrumb?.length !== i + 1 && (
-                  <BreadcrumbSeparator />
+                  <BreadcrumbSeparator key={`${item.label}-separator`} />
                 )}
               </>
             ))}
