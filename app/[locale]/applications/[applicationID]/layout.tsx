@@ -3,7 +3,8 @@
 import Loading from "@/components/Loading"
 import PageContainer from "@/components/PageContainer"
 import { Card } from "@/components/ui/card"
-import { useRouter } from "@/i18n/routing"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { usePathname, useRouter } from "@/i18n/routing"
 import { useStoreSelects } from "@/store"
 import { useTranslations } from "next-intl"
 import { useEffect, useMemo } from "react"
@@ -16,6 +17,7 @@ interface Properties {
 const Application: React.FC<Properties> = ({ params: { applicationID }, children }) => {
   const router = useRouter()
   const t = useTranslations('pages.applications')
+  const pathname = usePathname()
 
   const applications = useStoreSelects(s => s.applications.list)
 
@@ -41,6 +43,12 @@ const Application: React.FC<Properties> = ({ params: { applicationID }, children
         { label: application.name }
       ]}
     >
+      <Tabs defaultValue={pathname.split('/')[3]} onValueChange={router.replace}>
+        <TabsList>
+          <TabsTrigger value="groups">{t('view.tabs.groups')}</TabsTrigger>
+          <TabsTrigger value="users">{t('view.tabs.users')}</TabsTrigger>
+        </TabsList>
+      </Tabs>
       {children}
     </PageContainer>
   )

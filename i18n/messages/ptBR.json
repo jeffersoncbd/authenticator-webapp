@@ -35,6 +35,12 @@
         },
         "submitButtonLabel": "Adicionar aplicação",
         "possibleErrorTitle": "Falha ao tentar adicionar aplicação"
+      },
+      "view": {
+        "tabs": {
+          "groups": "Grupos",
+          "users": "Usuários"
+        }
       }
     },
     "logs": {
