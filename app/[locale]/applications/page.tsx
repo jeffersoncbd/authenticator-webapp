@@ -5,12 +5,12 @@ import { Button } from "@/components/ui/button"
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useApiService } from "@/services/api"
 import { useStoreActions, useStoreSelects } from "@/store"
-import { Check, Copy, RefreshCcw } from "lucide-react"
+import { RefreshCcw } from "lucide-react"
 import { useTranslations } from "next-intl"
 import NewApplication from "./NewApplication"
 import PageContainer from "@/components/PageContainer"
 import { Link } from "@/i18n/routing"
-import { useCopy } from "@/hooks/use-copy"
+import CopyToClipBoard from "@/components/CopyToClipboard"
 
 const Applications: React.FC = () => {
   const t = useTranslations('pages.applications')
@@ -18,8 +18,6 @@ const Applications: React.FC = () => {
   const apiService = useApiService()
   const loading = useStoreSelects((store) => store.loading)
   const applications = useStoreSelects((store) => store.applications)
-
-  const [currentValue, copyValue] = useCopy()
 
   return (
     <PageContainer title={t('title')}>
@@ -43,24 +41,16 @@ const Applications: React.FC = () => {
                 <CardTitle className="text-center">
                   {application.name}
                 </CardTitle>
-                <CardDescription className="flex justify-center">
-                  <span
-                    className="cursor-pointer flex items-center gap-2 text-[10px] min-[380px]:text-sm"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      copyValue(application.id)
-                    }}
-                  >
-                    {application.id} {currentValue !== application.id
-                      ? <Copy size={16} />
-                      : <Check size={16} />}
-                  </span>
+                <CardDescription>
+                  <CopyToClipBoard reference={application.id}>
+                    {application.id}
+                  </CopyToClipBoard>
                 </CardDescription>
               </CardHeader>
             </Card>
           </Link>
         ))
-      }
+      },l
     </PageContainer >
   )
 }

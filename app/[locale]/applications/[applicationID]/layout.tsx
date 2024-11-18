@@ -1,13 +1,12 @@
 'use client'
 
+import CopyToClipBoard from "@/components/CopyToClipboard"
 import Loading from "@/components/Loading"
 import PageContainer from "@/components/PageContainer"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useCopy } from "@/hooks/use-copy"
 import { usePathname, useRouter } from "@/i18n/routing"
 import { useApiService } from "@/services/api"
 import { useStoreActions, useStoreSelects } from "@/store"
-import { Check, Copy } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useEffect } from "react"
 
@@ -30,8 +29,6 @@ const Application: React.FC<Properties> = ({ params: { applicationID }, children
     return s.applications?.[applicationID]
   })
 
-  const [copiedValue, copyValue] = useCopy()
-
   useEffect(() => {
     if (application !== undefined && application !== null && application.groups === undefined) {
       action({
@@ -39,7 +36,7 @@ const Application: React.FC<Properties> = ({ params: { applicationID }, children
         payload: { applicationID, apiService, possibleErrorTitle: t('view.tabs.groups.possibleErrorTitleOnList') }
       })
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [application])
 
   if (application === null) {
@@ -59,21 +56,13 @@ const Application: React.FC<Properties> = ({ params: { applicationID }, children
         { label: application.name }
       ]}
     >
-      <p
-      className="flex gap-2 justify-center items-center cursor-pointer"
-      onClick={(e) => {
-        e.stopPropagation()
-        copyValue(application.id)
-      }}
-      >
-      {application.id} {copiedValue !== application.id
-                      ? <Copy size={16} />
-                      : <Check size={16} />}
-        </p>
-      <Tabs defaultValue={pathname.split('/')[3]} onValueChange={router.replace}>
-        <TabsList>
-          <TabsTrigger value="groups">{t('view.tabs.groups.title')}</TabsTrigger>
-          <TabsTrigger value="users">{t('view.tabs.users.title')}</TabsTrigger>
+      <CopyToClipBoard reference={application.id}>
+        {application.id}
+      </CopyToClipBoard>
+      <Tabs defaultValue={pathname.split('/')[3]} onValueChange={router.replace} className="w-full">
+        <TabsList className="w-full sm:w-1/2">
+          <TabsTrigger value="groups" className="w-1/2">{t('view.tabs.groups.title')}</TabsTrigger>
+          <TabsTrigger value="users" className="w-1/2">{t('view.tabs.users.title')}</TabsTrigger>
         </TabsList>
       </Tabs>
       {children}
