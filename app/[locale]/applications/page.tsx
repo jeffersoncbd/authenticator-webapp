@@ -7,10 +7,10 @@ import { useApiService } from "@/services/api"
 import { useStoreActions, useStoreSelects } from "@/store"
 import { Check, Copy, RefreshCcw } from "lucide-react"
 import { useTranslations } from "next-intl"
-import { useEffect, useState } from "react"
 import NewApplication from "./NewApplication"
 import PageContainer from "@/components/PageContainer"
 import { Link } from "@/i18n/routing"
+import { useCopy } from "@/hooks/use-copy"
 
 const Applications: React.FC = () => {
   const t = useTranslations('pages.applications')
@@ -19,16 +19,7 @@ const Applications: React.FC = () => {
   const loading = useStoreSelects((store) => store.loading)
   const applications = useStoreSelects((store) => store.applications)
 
-  const [copyId, setCopyId] = useState<null | string>(null)
-
-  useEffect(() => {
-    if (copyId !== null) {
-      void navigator.clipboard.writeText(copyId)
-      setTimeout(() => {
-        setCopyId(null)
-      }, 1000)
-    }
-  }, [copyId])
+  const [currentValue, copyValue] = useCopy()
 
   return (
     <PageContainer title={t('title')}>
@@ -57,10 +48,10 @@ const Applications: React.FC = () => {
                     className="cursor-pointer flex items-center gap-2 text-[10px] min-[380px]:text-sm"
                     onClick={(e) => {
                       e.stopPropagation()
-                      setCopyId(application.id)
+                      copyValue(application.id)
                     }}
                   >
-                    {application.id} {copyId !== application.id
+                    {application.id} {currentValue !== application.id
                       ? <Copy size={16} />
                       : <Check size={16} />}
                   </span>
@@ -69,7 +60,7 @@ const Applications: React.FC = () => {
             </Card>
           </Link>
         ))
-      },l
+      }
     </PageContainer >
   )
 }

@@ -1,9 +1,8 @@
 'use client'
 
-import Loading from "@/components/Loading";
 import { useToast } from "@/hooks/use-toast";
 import { usePathname, useRouter } from "@/i18n/routing";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 
 interface ContextProperties {
   startSession: (token: string) => void
@@ -32,10 +31,10 @@ const SessionContextProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   useEffect(() => {
     if (token !== undefined) {
-      if (Boolean(token) && pathName === '/') {
+      if (token !== null && pathName === '/') {
         router.push('/dashboard')
       }
-      if (!Boolean(token) && pathName !== '/') {
+      if (token === null && pathName !== '/') {
         router.replace('/')
       }
     }

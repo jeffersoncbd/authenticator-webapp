@@ -93,7 +93,7 @@ export function useApiService() {
           });
           return;
         }
-        console.log(`${title}\n${error}`);
+        console.error(`${title}\n${error}`);
         toast({ title, description: error.response.data.feedback });
       };
     },
