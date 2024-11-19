@@ -24,7 +24,7 @@ const PageContainer: React.FC<Properties> = (props) => {
               <React.Fragment key={`${item.label}-${item.href}`}>
                 <BreadcrumbItem>
                   {item.href === undefined ? <p className="truncate max-w-[100px]">{item.label}</p> : (
-                    <Link href={item.href} className="hover:text-white">
+                    <Link href={item.href} className="hover:text-black dark:hover:text-white">
                       {item.label}
                     </Link>
                   )}
