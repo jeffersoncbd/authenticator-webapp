@@ -59,7 +59,7 @@ const Application: React.FC<Properties> = ({ params: { applicationID }, children
       <CopyToClipBoard reference={application.id}>
         {application.id}
       </CopyToClipBoard>
-      <Tabs defaultValue={pathname.split('/')[3]} onValueChange={router.replace} className="w-full">
+      <Tabs defaultValue={pathname.split('/')[3]} onValueChange={router.replace} className="w-full my-4">
         <TabsList className="w-full sm:w-1/2">
           <TabsTrigger value="groups" className="w-1/2">{t('view.tabs.groups.title')}</TabsTrigger>
           <TabsTrigger value="users" className="w-1/2">{t('view.tabs.users.title')}</TabsTrigger>
