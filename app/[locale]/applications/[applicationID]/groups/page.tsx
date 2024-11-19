@@ -1,9 +1,10 @@
 'use client'
 
+import CardItem from "@/components/CardItem"
 import CopyToClipBoard from "@/components/CopyToClipboard"
 import Loading from "@/components/Loading"
 import { H3 } from "@/components/typography/headers"
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Link } from "@/i18n/routing"
 import { useStoreSelects } from "@/store"
 import { useTranslations } from "next-intl"
 
@@ -24,16 +25,16 @@ const ApplicationGroups: React.FC<Properties> = ({ params: { applicationID } }) 
     <>
       <H3>{t('title')}</H3>
       {Object.values(groups).map((group) => (
-        <Card key={group.id} className="py-0">
-          <CardHeader className="py-2">
-            <CardTitle className="text-center">{group.name}</CardTitle>
-            <CardDescription>
+        <Link key={group.id} href={`/applications/${applicationID}/groups/${group.id}`}>
+          <CardItem
+            title={group.name}
+            description={
               <CopyToClipBoard reference={group.id}>
                 {group.id}
               </CopyToClipBoard>
-            </CardDescription>
-          </CardHeader>
-        </Card>
+            }
+          />
+        </Link>
       ))}
     </>
   )

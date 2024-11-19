@@ -2,7 +2,6 @@
 
 import Loading from "@/components/Loading"
 import { Button } from "@/components/ui/button"
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useApiService } from "@/services/api"
 import { useStoreActions, useStoreSelects } from "@/store"
 import { RefreshCcw } from "lucide-react"
@@ -11,6 +10,7 @@ import NewApplication from "./NewApplication"
 import PageContainer from "@/components/PageContainer"
 import { Link } from "@/i18n/routing"
 import CopyToClipBoard from "@/components/CopyToClipboard"
+import CardItem from "@/components/CardItem"
 
 const Applications: React.FC = () => {
   const t = useTranslations('pages.applications')
@@ -36,18 +36,14 @@ const Applications: React.FC = () => {
         ? <Loading className="mt-10 flex justify-center items-center" />
         : Object.values(applications).map((application) => (
           <Link key={application.id} href={`/applications/${application.id}/groups`}>
-            <Card className="py-0">
-              <CardHeader className="py-2">
-                <CardTitle className="text-center">
-                  {application.name}
-                </CardTitle>
-                <CardDescription>
-                  <CopyToClipBoard reference={application.id}>
-                    {application.id}
-                  </CopyToClipBoard>
-                </CardDescription>
-              </CardHeader>
-            </Card>
+            <CardItem
+              title={application.name}
+              description={
+                <CopyToClipBoard reference={application.id}>
+                  {application.id}
+                </CopyToClipBoard>
+              }
+            />
           </Link>
         ))
       },l
