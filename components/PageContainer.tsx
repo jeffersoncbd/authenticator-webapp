@@ -14,22 +14,22 @@ interface Properties {
   breadcrumb?: BreadcrumbData[]
 }
 
-const PageContainer: React.FC<Properties> = (properties) => {
+const PageContainer: React.FC<Properties> = (props) => {
   return (
     <div className="flex flex-col gap-4 px-4 pb-4 w-full max-w-[1000px] mx-auto">
-      {properties.breadcrumb !== undefined && (
+      {props.breadcrumb !== undefined && (
         <Breadcrumb>
           <BreadcrumbList>
-            {properties.breadcrumb.map((item, i) => (
+            {props.breadcrumb.map((item, i) => (
               <React.Fragment key={`${item.label}-${item.href}`}>
                 <BreadcrumbItem>
-                  {item.href === undefined ? item.label : (
+                  {item.href === undefined ? <p className="truncate max-w-[100px]">{item.label}</p> : (
                     <Link href={item.href} className="hover:text-white">
                       {item.label}
                     </Link>
                   )}
                 </BreadcrumbItem>
-                {properties.breadcrumb?.length !== i + 1 && (
+                {props.breadcrumb?.length !== i + 1 && (
                   <BreadcrumbSeparator />
                 )}
               </React.Fragment>
@@ -37,9 +37,9 @@ const PageContainer: React.FC<Properties> = (properties) => {
           </BreadcrumbList>
         </Breadcrumb>
       )}
-      <H2 className="text-center">{properties.title}</H2>
+      <H2 className="text-center">{props.title}</H2>
 
-      {properties.children}
+      {props.children}
     </div>
   )
 }
