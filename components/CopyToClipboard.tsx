@@ -1,5 +1,6 @@
 import { Check, Copy } from "lucide-react"
 import { useEffect, useState } from "react"
+import { twMerge } from "tailwind-merge"
 
 interface Properties {
   reference: string
@@ -19,17 +20,23 @@ const CopyToClipBoard: React.FC<Properties> = (properties) => {
   }, [value])
 
   return (
-    <p
-      className="flex gap-2 justify-center items-center cursor-pointer text-[10px] min-[380px]:text-sm"
+    <button
+      type="button"
+      className={twMerge(
+        "bg-white bg-opacity-0 text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-white",
+        "flex gap-2 justify-center items-center",
+        "cursor-pointer text-[10px] min-[380px]:text-sm"
+      )}
       onClick={(e) => {
         e.stopPropagation()
+        e.preventDefault()
         setValue(properties.reference)
       }}
     >
       {properties.children} {value !== properties.reference
         ? <Copy size={16} />
         : <Check size={16} />}
-    </p>
+    </button>
   )
 }
 
