@@ -35,7 +35,7 @@ const Applications: React.FC = () => {
       {loading || applications === undefined
         ? <Loading className="mt-10 flex justify-center items-center" />
         : Object.values(applications).map((application) => (
-          <Link key={application.id} href={`/applications/${application.id}/groups`}>
+          <Link key={application.id} href={`/applications/${application.id}?tab=groups`}>
             <CardItem
               title={application.name}
               description={

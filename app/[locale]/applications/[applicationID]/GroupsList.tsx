@@ -9,10 +9,10 @@ import { useStoreSelects } from "@/store"
 import { useTranslations } from "next-intl"
 
 interface Properties {
-  params: { applicationID: string }
+  applicationID: string
 }
 
-const ApplicationGroups: React.FC<Properties> = ({ params: { applicationID } }) => {
+const GroupsList: React.FC<Properties> = ({ applicationID }) => {
   const t = useTranslations('pages.applications.view.tabs.groups')
 
   const groups = useStoreSelects((state) => state.applications?.[applicationID].groups)
@@ -22,7 +22,7 @@ const ApplicationGroups: React.FC<Properties> = ({ params: { applicationID } }) 
   }
 
   return (
-    <>
+    <div className="flex flex-col gap-4">
       <H3>{t('title')}</H3>
       {Object.values(groups).map((group) => (
         <Link key={group.id} href={`/applications/${applicationID}/groups/${group.id}`}>
@@ -36,8 +36,8 @@ const ApplicationGroups: React.FC<Properties> = ({ params: { applicationID } }) 
           />
         </Link>
       ))}
-    </>
+    </div>
   )
 }
 
-export default ApplicationGroups
+export default GroupsList
