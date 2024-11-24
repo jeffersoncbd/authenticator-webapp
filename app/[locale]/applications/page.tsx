@@ -46,7 +46,7 @@ const Applications: React.FC = () => {
             />
           </Link>
         ))
-      },l
+      }
     </PageContainer >
   )
 }
