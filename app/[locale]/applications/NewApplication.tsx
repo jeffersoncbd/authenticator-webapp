@@ -38,7 +38,9 @@ const NewApplication: React.FC = () => {
   return (
     <Dialog>
       <DialogTrigger asChild={true}>
-        <Button className="flex-1 min-[350px]:flex-none min-[350px]:w-[200px]">Adicionar</Button>
+        <Button className="flex-1 min-[350px]:flex-none min-[350px]:w-[200px]">
+          {t('buttonTriggerLabel')}
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -54,7 +56,9 @@ const NewApplication: React.FC = () => {
               control={form.control}
               label={t('nameInput.label')}
             />
-            <Button className="self-end" type="submit">{t('submitButtonLabel')}</Button>
+            <Button className="self-end" type="submit">
+              {t('submitButtonLabel')}
+            </Button>
           </form>
         </ShadcnForm>
         <DialogClose ref={closeRef} hidden={true}><div /></DialogClose>
