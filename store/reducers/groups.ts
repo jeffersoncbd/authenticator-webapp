@@ -2,6 +2,26 @@ import { ApiServices } from "@/services/api"
 import { createReducerWithSideEffect } from "../state"
 import { Group } from "@/services/api/interfaces"
 
+const addGroup = createReducerWithSideEffect(
+  "add-group",
+  (state, payload: { applicationId: string, group: Group }) => {
+    if (state.applications !== undefined) {
+      if (state.applications[payload.applicationId].groups !== undefined) {
+        (state.applications[payload.applicationId].groups as Record<string, Group>)[payload.group.id] = payload.group;
+      }
+    }
+  },
+  (
+    { state, sideEffect },
+    { groupName, apiService, applicationId, possibleErrorTitle }: { groupName: string, apiService: ApiServices, applicationId: string, possibleErrorTitle: string }
+  ) => {
+    state.loading = true
+    apiService.applications.groups.save({ applicationId, newGroup: { name: groupName } })
+      .then(({ id }) => sideEffect({ applicationId, group: { id, name: groupName, permissions: {} } }))
+      .catch(apiService.defaultErrorHandler(possibleErrorTitle))
+  }
+)
+
 const updateGroupsApplication = createReducerWithSideEffect(
   "update-groups-application",
   (state, payload: { groups: Group[], applicationID: string }) => {
@@ -23,5 +43,5 @@ const updateGroupsApplication = createReducerWithSideEffect(
   }
 )
 
-export const groupsReducers = [updateGroupsApplication]
+export const groupsReducers = [addGroup, updateGroupsApplication]
 

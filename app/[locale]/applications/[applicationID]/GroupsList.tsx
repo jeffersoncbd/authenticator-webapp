@@ -26,12 +26,12 @@ const GroupsList: React.FC<Properties> = ({ applicationID }) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap gap-4 justify-between">
         <H3 className="w-full text-center">{t('title')}</H3>
         <Button size="icon">
           <RefreshCcw />
         </Button>
-        <NewGroup />
+        <NewGroup applicationId={applicationID} />
       </div>
       {Object.values(groups).map((group) => (
         <Link key={group.id} href={`/applications/${applicationID}/groups/${group.id}`}>

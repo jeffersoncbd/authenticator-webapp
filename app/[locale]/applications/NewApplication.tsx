@@ -32,6 +32,7 @@ const NewApplication: React.FC = () => {
       type: "add-application",
       payload: { apiService, name: values.name, possibleErrorTitle: t('possibleErrorTitle') }
     })
+    form.setValue('name', '')
     closeRef.current?.click()
   }
 
