@@ -27,6 +27,7 @@
       "title": "Aplicações",
       "possibleErrorTitleOnList": "Falha ao tentar listar aplicações",
       "new": {
+        "buttonTriggerLabel": "Adicionar",
         "title": "Adicionar aplicação",
         "nameInput": {
           "label": "Nome da aplicação",
@@ -41,7 +42,19 @@
         "tabs": {
           "groups": {
             "title": "Grupos",
-            "possibleErrorTitleOnList": "Falha ao tentar listar grupos da aplicação"
+            "possibleErrorTitleOnList": "Falha ao tentar listar grupos da aplicação",
+            "new": {
+              "buttonTriggerLabel": "Adicionar",
+              "title": "Adicionar grupo",
+              "nameInput": {
+                "label": "Nome do grupo",
+                "validations": {
+                  "required": "O nome do grupo é obrigatório."
+                }
+              },
+              "submitButtonLabel": "Adicionar grupo",
+              "possibleErrorTitle": "Falha ao tentar adicionar grupo"
+            }
           },
           "users": {
             "title": "Usuários"
