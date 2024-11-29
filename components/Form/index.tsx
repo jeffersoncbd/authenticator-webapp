@@ -1,5 +1,7 @@
+import FormCheckbox from "./Checkbox";
 import FormInput from "./Input";
 
 export const Form = {
-    Input: FormInput
+    Input: FormInput,
+    Checkbox: FormCheckbox,
 }
