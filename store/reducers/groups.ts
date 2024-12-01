@@ -10,6 +10,7 @@ const addGroup = createReducerWithSideEffect(
         (state.applications[payload.applicationId].groups as Record<string, Group>)[payload.group.id] = payload.group;
       }
     }
+    state.loading = false
   },
   (
     { state, sideEffect },
