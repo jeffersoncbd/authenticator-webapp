@@ -54,6 +54,26 @@
               },
               "submitButtonLabel": "Adicionar grupo",
               "possibleErrorTitle": "Falha ao tentar adicionar grupo"
+            },
+            "view": {
+              "permissions": {
+                "title": "Permissões",
+                "new": {
+                  "buttonTriggerLabel": "Adicionar",
+                  "title": "Adicionar permissão",
+                  "keyInput": {
+                    "label": "Chave da permissão",
+                    "validations": {
+                      "required": "A chave da permissão é obrigatória."
+                    }
+                  },
+                  "readCheckboxLabel": "Leitura",
+                  "writeCheckboxLabel": "Escrita",
+                  "deleteCheckboxLabel": "Exclusão",
+                  "submitButtonLabel": "Adicionar permissão",
+                  "possibleErrorTitle": "Falha ao tentar adicionar permissão"
+                }
+              }
             }
           },
           "users": {
