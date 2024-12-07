@@ -1,6 +1,6 @@
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { useApiService } from "@/services/api"
-import { useStoreActions } from "@/store"
+import { useStoreActions, useStoreSelects } from "@/store"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useTranslations } from "next-intl"
 import { useRef } from "react"
@@ -10,6 +10,7 @@ import { Form as ShadcnForm } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import { Form } from "@/components/Form"
 import { Permission } from "@/services/api/interfaces"
+import { useToast } from "@/hooks/use-toast"
 
 interface Properties {
   applicationId: string
@@ -17,9 +18,12 @@ interface Properties {
 }
 
 const NewPermission: React.FC<Properties> = ({ applicationId, groupId }) => {
-  const t = useTranslations('pages.applications.view.tabs.groups.view.permissions.new')
   const action = useStoreActions()
   const apiService = useApiService()
+  const { toast } = useToast()
+
+  const t = useTranslations('pages.applications.view.tabs.groups.view.permissions.new')
+  const permissions = useStoreSelects(s => s.applications?.[applicationId].groups?.[groupId].permissions)
 
   const closeRef = useRef<HTMLButtonElement>(null)
 
@@ -35,10 +39,14 @@ const NewPermission: React.FC<Properties> = ({ applicationId, groupId }) => {
   })
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    form.setValue('permissionKey', '')
-    form.setValue('read', false)
-    form.setValue('write', false)
-    form.setValue('delete', false)
+    if (permissions === undefined) {
+      return
+    }
+
+    if (Object.keys(permissions).includes(values.permissionKey)) {
+      toast({ title: 'A chave informada já existe', style: { backgroundColor: 'yellow', color: 'black' } })
+      return
+    }
 
     const newPermission: Permission = {
       key: values.permissionKey,
@@ -55,7 +63,17 @@ const NewPermission: React.FC<Properties> = ({ applicationId, groupId }) => {
       newPermission.permission += 4
     }
 
+    if (newPermission.permission === 0) {
+      toast({ title: 'Selecione ao menos uma permissão', style: { backgroundColor: 'yellow', color: 'black' } })
+      return
+    }
+
     action({ type: "add-permission", payload: { apiService, applicationId, groupId, newPermission, possibleErrorTitle: t('possibleErrorTitle') } })
+
+    form.setValue('permissionKey', '')
+    form.setValue('read', false)
+    form.setValue('write', false)
+    form.setValue('delete', false)
 
     closeRef.current?.click()
   }
@@ -70,7 +88,7 @@ const NewPermission: React.FC<Properties> = ({ applicationId, groupId }) => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{t('title')}</DialogTitle>
-          <DialogDescription>teste</DialogDescription>
+          <DialogDescription></DialogDescription>
         </DialogHeader>
         <ShadcnForm {...form}>
           <form
