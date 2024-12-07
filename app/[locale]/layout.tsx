@@ -10,6 +10,7 @@ import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import "./globals.css";
 import ApplicationLoader from "@/components/ApplicationLoader";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 export const metadata: Metadata = {
   title: "AuthTor",
@@ -41,11 +42,13 @@ export default async function RootLayout({
             >
               <StoreProvider>
                 <ApplicationLoader>
-                  <div className="h-screen flex flex-col">
-                    <HeaderBar />
-                    {children}
-                    <Toaster />
-                  </div>
+                  <TooltipProvider>
+                    <div className="h-screen flex flex-col">
+                      <HeaderBar />
+                      {children}
+                      <Toaster />
+                    </div>
+                  </TooltipProvider>
                 </ApplicationLoader>
               </StoreProvider>
             </ThemeProvider>
