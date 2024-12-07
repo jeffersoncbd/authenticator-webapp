@@ -58,20 +58,25 @@
             "view": {
               "permissions": {
                 "title": "Permissões",
+                "keyInput": {
+                  "label": "Chave da permissão",
+                  "validations": {
+                    "required": "A chave da permissão é obrigatória."
+                  }
+                },
+                "readCheckboxLabel": "Leitura",
+                "writeCheckboxLabel": "Escrita",
+                "deleteCheckboxLabel": "Exclusão",
                 "new": {
                   "buttonTriggerLabel": "Adicionar",
                   "title": "Adicionar permissão",
-                  "keyInput": {
-                    "label": "Chave da permissão",
-                    "validations": {
-                      "required": "A chave da permissão é obrigatória."
-                    }
-                  },
-                  "readCheckboxLabel": "Leitura",
-                  "writeCheckboxLabel": "Escrita",
-                  "deleteCheckboxLabel": "Exclusão",
-                  "submitButtonLabel": "Adicionar permissão",
+                  "submitButtonLabel": "Adicionar",
                   "possibleErrorTitle": "Falha ao tentar adicionar permissão"
+                },
+                "edit": {
+                  "title": "Editar permissão",
+                  "submitButtonLabel": "Salvar",
+                  "possibleErrorTitle": "Falha ao tentar salvar as alterações"
                 }
               }
             }

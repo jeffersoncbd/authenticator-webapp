@@ -7,31 +7,33 @@ import { H3 } from "@/components/typography/headers"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
+import { SessionContext } from "@/contexts/Session"
 import { useRouter } from "@/i18n/routing"
 import { useApiService } from "@/services/api"
+import { Permission } from "@/services/api/interfaces"
 import { useStoreActions, useStoreSelects } from "@/store"
-import { RefreshCcw } from "lucide-react"
+import { RefreshCcw, Trash2 } from "lucide-react"
 import { useTranslations } from "next-intl"
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useState } from "react"
+import EditPermission from "./EditPermission"
 import NewPermission from "./NewPermission"
-import { SessionContext } from "@/contexts/Session"
+import { parsePermission } from "./utils"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 
 interface Properties {
   params: { applicationID: string, groupID: string }
 }
 
-function parsePermission(permission: number): [number, number, number] {
-  const binary = permission.toString(2).padStart(3, '0')
-  return binary.split('').reverse().map(Number) as [number, number, number]
-}
-
 const Group: React.FC<Properties> = ({ params: { applicationID, groupID } }) => {
   const { token } = useContext(SessionContext)
 
-  const t = useTranslations('pages.applications')
+  const tApplications = useTranslations('pages.applications')
+  const t = useTranslations('pages.applications.view.tabs.groups')
   const router = useRouter()
   const apiService = useApiService()
   const action = useStoreActions()
+
+  const [permissionEdition, setPermissionEdition] = useState<Permission | undefined>()
 
   const [applicationName, group] = useStoreSelects((s => {
     if (s.applications?.[applicationID].groups === undefined) {
@@ -43,12 +45,17 @@ const Group: React.FC<Properties> = ({ params: { applicationID, groupID } }) => 
     ]
   }))
 
+  const checkboxLabels = [
+    t('view.permissions.readCheckboxLabel'),
+    t('view.permissions.writeCheckboxLabel'),
+    t('view.permissions.deleteCheckboxLabel')
+  ]
 
   useEffect(() => {
     if (group === null && token !== null) {
       action({
         type: 'update-groups-application',
-        payload: { apiService, applicationID, possibleErrorTitle: t('view.tabs.groups.possibleErrorTitleOnList') }
+        payload: { apiService, applicationID, possibleErrorTitle: t('possibleErrorTitleOnList') }
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -67,7 +74,7 @@ const Group: React.FC<Properties> = ({ params: { applicationID, groupID } }) => 
     <PageContainer
       title={group.name}
       breadcrumb={[
-        { label: t('title'), href: '/applications' },
+        { label: tApplications('title'), href: '/applications' },
         { label: applicationName, href: `/applications/${applicationID}?tab=groups` },
         { label: group.name }
       ]}
@@ -76,20 +83,45 @@ const Group: React.FC<Properties> = ({ params: { applicationID, groupID } }) => 
         {groupID}
       </CopyToClipBoard>
       <div className="flex flex-wrap gap-4 justify-between">
-        <H3 className="w-full text-center">{t('view.tabs.groups.view.permissions.title')}</H3>
+        <H3 className="w-full text-center">{t('view.permissions.title')}</H3>
         <Button size="icon">
           <RefreshCcw />
         </Button>
         <NewPermission applicationId={applicationID} groupId={group.id} />
+        <EditPermission
+          applicationId={applicationID}
+          groupId={group.id}
+          permission={permissionEdition}
+          onClose={() => setPermissionEdition(undefined)}
+        />
       </div>
       {Object.keys(group.permissions).map((permission) => (
-        <Card key={permission} className="p-4 flex justify-between items-center">
-          <span>{permission}</span>
+        <Card
+          key={permission}
+          className="p-4 flex justify-between gap-6 items-center dark:hover:bg-gray-950 cursor-pointer"
+          onClick={() => setPermissionEdition({ key: permission, permission: group.permissions[permission] })}
+        >
+          <p className="flex-1">{permission}</p>
           <div className="flex gap-4">
-            {parsePermission(group.permissions[permission]).map((permission, i) =>
-              <Checkbox key={`${i}-${permission}`} checked={permission === 1} />
-            )}
+            {parsePermission(group.permissions[permission]).map((permission, i) => (
+              <Tooltip key={`${i}-${permission}`}>
+                <TooltipTrigger asChild>
+                  <div className="flex justify-center items-center">
+                    <Checkbox checked={permission === 1} />
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  {checkboxLabels[i]}
+                </TooltipContent>
+              </Tooltip>
+            ))}
           </div>
+          <Button variant="secondary" size="icon" onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+          }}>
+            <Trash2 className="stroke-red-700" />
+          </Button>
         </Card>
       ))}
     </PageContainer>

@@ -3,7 +3,7 @@ import { BasicResponse, Permission } from "../interfaces";
 
 export function permissions(service: AxiosInstance) {
   return {
-    add: async (data: {
+    set: async (data: {
       applicationId: string;
       groupId: string;
       newPermission: Permission;
