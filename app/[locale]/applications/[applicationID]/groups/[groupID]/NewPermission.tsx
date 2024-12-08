@@ -37,7 +37,7 @@ const NewPermission: React.FC<Properties> = ({ applicationId, groupId }) => {
       return
     }
 
-    action({ type: "set-permission", payload: { apiService, applicationId, groupId, newPermission, possibleErrorTitle: t('possibleErrorTitle') } })
+    action({ type: "add-permission", payload: { apiService, applicationId, groupId, newPermission, possibleErrorTitle: t('possibleErrorTitle') } })
     clearForm()
     closeRef.current?.click()
   }

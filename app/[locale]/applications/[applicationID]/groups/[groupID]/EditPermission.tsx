@@ -1,6 +1,6 @@
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { useApiService } from "@/services/api"
-import { useStoreActions } from "@/store"
+import { useStoreActions, useStoreSelects } from "@/store"
 import { useTranslations } from "next-intl"
 import { useMemo, useRef } from "react"
 import { Permission } from "@/services/api/interfaces"
@@ -23,20 +23,31 @@ const EditPermission: React.FC<Properties> = ({ applicationId, groupId, permissi
 
   const t = useTranslations('pages.applications.view.tabs.groups.view.permissions.edit')
 
+  const permissions = useStoreSelects(s => s.applications?.[applicationId].groups?.[groupId].permissions)
+
   const closeRef = useRef<HTMLButtonElement>(null)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const permissions = useMemo(() => parsePermission(permission?.permission ?? 0), [permission?.key])
+  const permissionsValues = useMemo(() => parsePermission(permission?.permission ?? 0), [permission?.key])
 
   const submitHandler = (newPermission: Permission, clearForm: () => void) => {
+    if (permissions === undefined) {
+      return
+    }
+    if (Object.keys(permissions).includes(newPermission.key)) {
+      toast({ title: 'Já existe uma permissão com esta chave', style: { backgroundColor: 'yellow', color: 'black' } })
+      return
+    }
     if (newPermission.permission === 0) {
       toast({ title: 'Selecione ao menos uma permissão', style: { backgroundColor: 'yellow', color: 'black' } })
       return
     }
 
-    action({ type: "set-permission", payload: { apiService, applicationId, groupId, newPermission, possibleErrorTitle: t('possibleErrorTitle') } })
-    clearForm()
-    closeRef.current?.click()
+    if (permission !== undefined) {
+      action({ type: "update-permission", payload: { apiService, applicationId, groupId, permissionKey: permission.key, updatedPermission: newPermission, possibleErrorTitle: t('possibleErrorTitle') } })
+      clearForm()
+      closeRef.current?.click()
+    }
   }
 
   if (permission === undefined) {
@@ -59,9 +70,9 @@ const EditPermission: React.FC<Properties> = ({ applicationId, groupId, permissi
         <PermissionForm
           initialValues={{
             permissionKey: permission.key,
-            read: permissions[0] === 1,
-            write: permissions[1] === 1,
-            delete: permissions[2] === 1,
+            read: permissionsValues[0] === 1,
+            write: permissionsValues[1] === 1,
+            delete: permissionsValues[2] === 1,
           }}
           handleSubmitData={submitHandler}
         >
