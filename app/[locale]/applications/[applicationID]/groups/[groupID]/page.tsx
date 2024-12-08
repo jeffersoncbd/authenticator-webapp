@@ -19,6 +19,7 @@ import EditPermission from "./EditPermission"
 import NewPermission from "./NewPermission"
 import { parsePermission } from "./utils"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import DeletePermission from "./DeletePermission"
 
 interface Properties {
   params: { applicationID: string, groupID: string }
@@ -34,6 +35,7 @@ const Group: React.FC<Properties> = ({ params: { applicationID, groupID } }) => 
   const action = useStoreActions()
 
   const [permissionEdition, setPermissionEdition] = useState<Permission | undefined>()
+  const [permissionExclusion, setPermissionExclusion] = useState<string | undefined>()
 
   const [applicationName, group] = useStoreSelects((s => {
     if (s.applications?.[applicationID].groups === undefined) {
@@ -94,6 +96,12 @@ const Group: React.FC<Properties> = ({ params: { applicationID, groupID } }) => 
           permission={permissionEdition}
           onClose={() => setPermissionEdition(undefined)}
         />
+        <DeletePermission
+          applicationID={applicationID}
+          groupID={group.id}
+          permissionKey={permissionExclusion}
+          onClose={() => setPermissionExclusion(undefined)}
+        />
       </div>
       {Object.keys(group.permissions).map((permission) => (
         <Card
@@ -119,6 +127,7 @@ const Group: React.FC<Properties> = ({ params: { applicationID, groupID } }) => 
           <Button variant="secondary" size="icon" onClick={(e) => {
             e.preventDefault()
             e.stopPropagation()
+            setPermissionExclusion(permission)
           }}>
             <Trash2 className="stroke-red-700" />
           </Button>

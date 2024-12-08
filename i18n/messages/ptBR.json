@@ -77,6 +77,15 @@
                   "title": "Editar permissão",
                   "submitButtonLabel": "Salvar",
                   "possibleErrorTitle": "Falha ao tentar salvar as alterações"
+                },
+                "delete": {
+                  "dialog": {
+                    "title": "Realmente deseja remover a permissão?",
+                    "description": "Esta ação não poderá ser desfeita!",
+                    "delete": "Remover",
+                    "cancel": "Cancelar"
+                  },
+                  "possibleErrorTitle": "Falha ao tentar remover a permissão"
                 }
               }
             }

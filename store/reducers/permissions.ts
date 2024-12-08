@@ -10,6 +10,7 @@ const setPermission = createReducerWithSideEffect(
         (state.applications[payload.applicationId].groups as Record<string, Group>)[payload.groupId].permissions[payload.newPermission.key] = payload.newPermission.permission
       }
     }
+    state.loading = false
   },
   (
     { state, sideEffect },
@@ -22,4 +23,25 @@ const setPermission = createReducerWithSideEffect(
   }
 )
 
-export const permissionsReducers = [setPermission]
+const removePermission = createReducerWithSideEffect(
+  "delete-permission",
+  (state, payload: { applicationId: string, groupId: string, permissionKey: string }) => {
+    if (state.applications !== undefined) {
+      if (state.applications[payload.applicationId].groups !== undefined) {
+        delete (state.applications[payload.applicationId].groups as Record<string, Group>)[payload.groupId].permissions[payload.permissionKey]
+      }
+    }
+    state.loading = false
+  },
+  (
+    { state, sideEffect },
+    { permissionKey, groupId, apiService, applicationId, possibleErrorTitle }: { groupId: string, apiService: ApiServices, applicationId: string, possibleErrorTitle: string, permissionKey: string }
+  ) => {
+    state.loading = true
+    apiService.applications.groups.permissions.delete({ applicationId, groupId, permissionKey })
+      .then(() => sideEffect({ applicationId, groupId, permissionKey }))
+      .catch(apiService.defaultErrorHandler(possibleErrorTitle))
+  }
+)
+
+export const permissionsReducers = [setPermission, removePermission]

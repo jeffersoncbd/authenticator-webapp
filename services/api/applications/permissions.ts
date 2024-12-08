@@ -14,5 +14,15 @@ export function permissions(service: AxiosInstance) {
       );
       return response.data;
     },
+    delete: async (data: {
+      applicationId: string;
+      groupId: string;
+      permissionKey: string;
+    }) => {
+      const response = await service.delete<BasicResponse>(
+        `/applications/${data.applicationId}/groups/${data.groupId}/permissions/${data.permissionKey}`
+      )
+      return response.data
+    }
   };
 }
