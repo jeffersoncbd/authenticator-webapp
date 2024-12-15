@@ -56,6 +56,7 @@ const NewApplication: React.FC = () => {
               name="name"
               control={form.control}
               label={t('nameInput.label')}
+              onChange={(e) => e.target.value = e.target.value.replace(/[^a-zA-Z0-9 ]/g, "")}
             />
             <Button className="self-end" type="submit">
               {t('submitButtonLabel')}

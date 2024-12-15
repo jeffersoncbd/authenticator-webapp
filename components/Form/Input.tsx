@@ -1,4 +1,4 @@
-import { HTMLInputTypeAttribute } from "react"
+import { ChangeEventHandler, HTMLInputTypeAttribute } from "react"
 import { Control, FieldValues, Path } from "react-hook-form"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import { Input } from "../ui/input"
@@ -9,6 +9,7 @@ interface Properties<T extends FieldValues> {
     label: string
     placeholder?: string
     type?: HTMLInputTypeAttribute
+    onChange?: ChangeEventHandler<HTMLInputElement>
 }
 
 const FormInput = <T extends FieldValues>(properties: Properties<T>) => {
@@ -24,6 +25,12 @@ const FormInput = <T extends FieldValues>(properties: Properties<T>) => {
                             type={properties.type}
                             placeholder={properties.placeholder}
                             {...field}
+                            onChange={(e) => {
+                                if (properties.onChange !== undefined) {
+                                    properties.onChange(e)
+                                }
+                                field.onChange(e)
+                            }}
                         />
                     </FormControl>
                     <FormMessage />

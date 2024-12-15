@@ -70,6 +70,7 @@ const PermissionForm
             name="permissionKey"
             control={form.control}
             label={t('keyInput.label')}
+            onChange={(e) => e.target.value = e.target.value.replace(/[^a-zA-Z0-9 ]/g, "")}
           />
           <div className="flex justify-around">
             <Form.Checkbox
