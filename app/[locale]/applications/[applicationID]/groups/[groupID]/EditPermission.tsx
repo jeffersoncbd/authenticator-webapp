@@ -34,7 +34,7 @@ const EditPermission: React.FC<Properties> = ({ applicationId, groupId, permissi
     if (permissions === undefined) {
       return
     }
-    if (Object.keys(permissions).includes(newPermission.key)) {
+    if (newPermission.key !== permission?.key && Object.keys(permissions).includes(newPermission.key)) {
       toast({ title: 'Já existe uma permissão com esta chave', style: { backgroundColor: 'yellow', color: 'black' } })
       return
     }
