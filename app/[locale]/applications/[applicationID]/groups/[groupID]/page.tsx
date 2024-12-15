@@ -84,7 +84,16 @@ const Group: React.FC<Properties> = ({ params: { applicationID, groupID } }) => 
       <CopyToClipBoard reference={groupID}>
         {groupID}
       </CopyToClipBoard>
-      <div className="flex flex-wrap gap-4 justify-between">
+      <Button
+        className="self-center flex-1 min-[350px]:flex-none min-[350px]:w-[200px] bg-red-600 hover:bg-red-500 dark:bg-red-600 dark:hover:bg-red-700"
+        onClick={() => action({
+          type: "remove-group-from-application",
+          payload: { apiService, applicationID, groupID, possibleErrorTitle: t('error') }
+        })}
+      >
+        Excluir este grupo
+      </Button>
+      <div className="mt-2 flex flex-wrap gap-4 justify-between">
         <H3 className="w-full text-center">{t('view.permissions.title')}</H3>
         <Button size="icon">
           <RefreshCcw />
@@ -103,36 +112,38 @@ const Group: React.FC<Properties> = ({ params: { applicationID, groupID } }) => 
           onClose={() => setPermissionExclusion(undefined)}
         />
       </div>
-      {Object.keys(group.permissions).map((permission) => (
-        <Card
-          key={permission}
-          className="p-4 flex justify-between gap-6 items-center dark:hover:bg-gray-950 cursor-pointer"
-          onClick={() => setPermissionEdition({ key: permission, permission: group.permissions[permission] })}
-        >
-          <p className="flex-1">{permission}</p>
-          <div className="flex gap-4">
-            {parsePermission(group.permissions[permission]).map((permission, i) => (
-              <Tooltip key={`${i}-${permission}`}>
-                <TooltipTrigger asChild>
-                  <div className="flex justify-center items-center">
-                    <Checkbox checked={permission === 1} />
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  {checkboxLabels[i]}
-                </TooltipContent>
-              </Tooltip>
-            ))}
-          </div>
-          <Button variant="secondary" size="icon" onClick={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            setPermissionExclusion(permission)
-          }}>
-            <Trash2 className="stroke-red-700" />
-          </Button>
-        </Card>
-      ))}
+      {Object.keys(group.permissions)
+        .toSorted((a, b) => a.localeCompare(b))
+        .map((permission) => (
+          <Card
+            key={permission}
+            className="p-4 flex justify-between gap-6 items-center dark:hover:bg-gray-950 cursor-pointer"
+            onClick={() => setPermissionEdition({ key: permission, permission: group.permissions[permission] })}
+          >
+            <p className="flex-1">{permission}</p>
+            <div className="flex gap-4">
+              {parsePermission(group.permissions[permission]).map((permission, i) => (
+                <Tooltip key={`${i}-${permission}`}>
+                  <TooltipTrigger asChild>
+                    <div className="flex justify-center items-center">
+                      <Checkbox checked={permission === 1} />
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {checkboxLabels[i]}
+                  </TooltipContent>
+                </Tooltip>
+              ))}
+            </div>
+            <Button variant="secondary" size="icon" onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              setPermissionExclusion(permission)
+            }}>
+              <Trash2 className="stroke-red-700" />
+            </Button>
+          </Card>
+        ))}
     </PageContainer>
   )
 }

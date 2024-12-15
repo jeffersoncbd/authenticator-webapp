@@ -1,5 +1,5 @@
 import { AxiosInstance } from "axios";
-import { BasicCreation, Group, NewGroup } from "../interfaces";
+import { BasicCreation, BasicResponse, Group, NewGroup } from "../interfaces";
 import { permissions } from "./permissions";
 
 export function groups(service: AxiosInstance) {
@@ -15,6 +15,10 @@ export function groups(service: AxiosInstance) {
         `/applications/${data.applicationId}/groups`,
         data.newGroup
       );
+      return response.data;
+    },
+    delete: async (data: { applicationId: string; groupId: string }) => {
+      const response = await service.delete<BasicResponse>(`/applications/${data.applicationId}/groups/${data.groupId}`);
       return response.data;
     },
     permissions: permissions(service),

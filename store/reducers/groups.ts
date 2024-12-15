@@ -44,5 +44,26 @@ const updateGroupsApplication = createReducerWithSideEffect(
   }
 )
 
-export const groupsReducers = [addGroup, updateGroupsApplication]
+const removeGroupFromApplication = createReducerWithSideEffect(
+  "remove-group-from-application",
+  (state, payload: { applicationID: string, groupID: string }) => {
+    if (state.applications !== undefined) {
+      if (state.applications[payload.applicationID].groups !== undefined) {
+        delete (state.applications[payload.applicationID].groups as Record<string, Group>)[payload.groupID]
+      }
+    }
+    state.loading = false
+  },
+  (
+    { state, sideEffect },
+    { apiService, applicationID, groupID, possibleErrorTitle }: { applicationID: string, apiService: ApiServices, groupID: string, possibleErrorTitle: string }
+  ) => {
+    state.loading = true
+    apiService.applications.groups.delete({ applicationId: applicationID, groupId: groupID })
+      .then(() => sideEffect({ applicationID, groupID }))
+      .catch(apiService.defaultErrorHandler(possibleErrorTitle))
+  }
+)
+
+export const groupsReducers = [addGroup, updateGroupsApplication, removeGroupFromApplication]
 
