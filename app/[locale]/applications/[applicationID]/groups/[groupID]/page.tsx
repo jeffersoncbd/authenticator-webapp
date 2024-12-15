@@ -20,6 +20,7 @@ import NewPermission from "./NewPermission"
 import { parsePermission } from "./utils"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import DeletePermission from "./DeletePermission"
+import DeleteGroup from "./DeleteGroup"
 
 interface Properties {
   params: { applicationID: string, groupID: string }
@@ -33,6 +34,8 @@ const Group: React.FC<Properties> = ({ params: { applicationID, groupID } }) => 
   const router = useRouter()
   const apiService = useApiService()
   const action = useStoreActions()
+
+  const [groupExclusion, setGroupExclusion] = useState<string | undefined>()
 
   const [permissionEdition, setPermissionEdition] = useState<Permission | undefined>()
   const [permissionExclusion, setPermissionExclusion] = useState<string | undefined>()
@@ -86,13 +89,15 @@ const Group: React.FC<Properties> = ({ params: { applicationID, groupID } }) => 
       </CopyToClipBoard>
       <Button
         className="self-center flex-1 min-[350px]:flex-none min-[350px]:w-[200px] bg-red-600 hover:bg-red-500 dark:bg-red-600 dark:hover:bg-red-700"
-        onClick={() => action({
-          type: "remove-group-from-application",
-          payload: { apiService, applicationID, groupID, possibleErrorTitle: t('error') }
-        })}
+        onClick={() => setGroupExclusion(groupID)}
       >
         Excluir este grupo
       </Button>
+      <DeleteGroup
+        applicationID={applicationID}
+        groupID={groupExclusion}
+        onClose={() => setGroupExclusion(undefined)}
+      />
       <div className="mt-2 flex flex-wrap gap-4 justify-between">
         <H3 className="w-full text-center">{t('view.permissions.title')}</H3>
         <Button size="icon">

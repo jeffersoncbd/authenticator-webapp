@@ -88,6 +88,15 @@
                   "possibleErrorTitle": "Falha ao tentar remover a permissão"
                 }
               }
+            },
+            "delete": {
+              "dialog": {
+                "title": "Realmente deseja remover o grupo?",
+                "description": "Esta ação não poderá ser desfeita!",
+                "delete": "Remover",
+                "cancel": "Cancelar"
+              },
+              "possibleErrorTitle": "Falha ao tentar remover o grupo"
             }
           },
           "users": {
