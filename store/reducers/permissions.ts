@@ -29,7 +29,9 @@ const updatePermission = createReducerWithSideEffect(
     if (state.applications !== undefined) {
       if (state.applications[payload.applicationId].groups !== undefined) {
         (state.applications[payload.applicationId].groups as Record<string, Group>)[payload.groupId].permissions[payload.updatedPermission.key] = payload.updatedPermission.permission
-        delete (state.applications[payload.applicationId].groups as Record<string, Group>)[payload.groupId].permissions[payload.permissionKey]
+        if (payload.permissionKey !== payload.updatedPermission.key) {
+          delete (state.applications[payload.applicationId].groups as Record<string, Group>)[payload.groupId].permissions[payload.permissionKey]
+        }
       }
     }
     state.loading = false
