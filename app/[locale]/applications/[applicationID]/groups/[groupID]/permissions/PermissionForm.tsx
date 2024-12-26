@@ -1,10 +1,7 @@
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useTranslations } from "next-intl"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { Form as ShadcnForm } from "@/components/ui/form"
-import { Form } from "@/components/Form"
+import { useFormCreator } from "@/hooks/use-form-creator"
 import { Permission } from "@/services/api/interfaces"
+import { useTranslations } from "next-intl"
+import { z } from "zod"
 
 interface Properties {
   children?: React.ReactNode
@@ -22,76 +19,61 @@ const PermissionForm
 
     const t = useTranslations('pages.applications.view.tabs.groups.view.permissions')
 
-    const formSchema = z.object({
+    const Form = useFormCreator({
       permissionKey: z.string({ message: t('keyInput.validations.required') }),
       read: z.boolean().optional(),
       write: z.boolean().optional(),
       delete: z.boolean().optional(),
-    })
-
-    const form = useForm<z.infer<typeof formSchema>>({
-      resolver: zodResolver(formSchema), values: initialValues
-    })
+    }, initialValues)
 
     const clearForm = () => {
-      form.setValue('permissionKey', '')
-      form.setValue('read', false)
-      form.setValue('write', false)
-      form.setValue('delete', false)
-    }
-
-    const onSubmit = (values: z.infer<typeof formSchema>) => {
-
-      const newPermission: Permission = {
-        key: values.permissionKey,
-        permission: 0
-      }
-
-      if (values.read) {
-        newPermission.permission += 1
-      }
-      if (values.write) {
-        newPermission.permission += 2
-      }
-      if (values.delete) {
-        newPermission.permission += 4
-      }
-
-      handleSubmitData(newPermission, clearForm)
+      Form.setValue('permissionKey', '')
+      Form.setValue('read', false)
+      Form.setValue('write', false)
+      Form.setValue('delete', false)
     }
 
     return (
-      <ShadcnForm {...form}>
-        <form
-          className="flex flex-col gap-4"
-          onSubmit={form.handleSubmit(onSubmit)}
-        >
-          <Form.Input
-            name="permissionKey"
-            control={form.control}
-            label={t('keyInput.label')}
-            onChange={(e) => e.target.value = e.target.value.replace(/[^a-zA-Z0-9 ]/g, "")}
+      <Form.Container onSubmit={(values) => {
+
+        const newPermission: Permission = {
+          key: values.permissionKey,
+          permission: 0
+        }
+
+        if (values.read) {
+          newPermission.permission += 1
+        }
+        if (values.write) {
+          newPermission.permission += 2
+        }
+        if (values.delete) {
+          newPermission.permission += 4
+        }
+
+        handleSubmitData(newPermission, clearForm)
+      }}>
+        <Form.Input
+          name="permissionKey"
+          label={t('keyInput.label')}
+          onChange={(e) => e.target.value = e.target.value.replace(/[^a-zA-Z0-9 ]/g, "")}
+        />
+        <div className="flex justify-around">
+          <Form.Checkbox
+            name="read"
+            label={t('readCheckboxLabel')}
           />
-          <div className="flex justify-around">
-            <Form.Checkbox
-              name="read"
-              control={form.control}
-              label={t('readCheckboxLabel')}
-            />
-            <Form.Checkbox
-              name="write"
-              control={form.control}
-              label={t('writeCheckboxLabel')}
-            />
-            <Form.Checkbox
-              name="delete"
-              control={form.control}
-              label={t('deleteCheckboxLabel')}
-            />
-          </div>
-          {children}
-        </form>
-      </ShadcnForm>
+          <Form.Checkbox
+            name="write"
+            label={t('writeCheckboxLabel')}
+          />
+          <Form.Checkbox
+            name="delete"
+            label={t('deleteCheckboxLabel')}
+          />
+        </div>
+        {children}
+      </Form.Container>
     )
   }
 
