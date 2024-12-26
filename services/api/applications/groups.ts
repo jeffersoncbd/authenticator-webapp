@@ -17,6 +17,13 @@ export function groups(service: AxiosInstance) {
       );
       return response.data;
     },
+    rename: async (data: { applicationId: string, groupId: string, newName: string }) => {
+      const response = await service.patch<BasicResponse>(
+        `/applications/${data.applicationId}/groups/${data.groupId}`,
+        { newName: data.newName }
+      )
+      return response.data
+    },
     delete: async (data: { applicationId: string; groupId: string }) => {
       const response = await service.delete<BasicResponse>(`/applications/${data.applicationId}/groups/${data.groupId}`);
       return response.data;

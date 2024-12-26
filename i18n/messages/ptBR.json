@@ -55,6 +55,9 @@
               "submitButtonLabel": "Adicionar grupo",
               "possibleErrorTitle": "Falha ao tentar adicionar grupo"
             },
+            "rename": {
+              "possibleErrorTitle": "Falha ao tentar renomear grupo"
+            },
             "view": {
               "permissions": {
                 "title": "Permissões",
@@ -90,6 +93,7 @@
               }
             },
             "delete": {
+              "buttonTriggerLabel": "Excluir este grupo",
               "dialog": {
                 "title": "Realmente deseja remover o grupo?",
                 "description": "Esta ação não poderá ser desfeita!",
@@ -118,6 +122,14 @@
     },
     "loading": {
       "label": "Carregando"
+    },
+    "pageContainer": {
+      "titleInput": {
+        "label": "Título",
+        "validations": {
+          "required": "O título é obrigatório."
+        }
+      }
     }
   }
 }

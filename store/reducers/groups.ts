@@ -23,8 +23,8 @@ const addGroup = createReducerWithSideEffect(
   }
 )
 
-const updateGroupsApplication = createReducerWithSideEffect(
-  "update-groups-application",
+const listGroupsApplication = createReducerWithSideEffect(
+  "list-groups-application",
   (state, payload: { groups: Group[], applicationID: string }) => {
     if (state.applications !== undefined) {
       const groups: Record<string, Group> = {}
@@ -40,6 +40,27 @@ const updateGroupsApplication = createReducerWithSideEffect(
     state.loading = true
     apiService.applications.groups.list(applicationID)
       .then((groups) => sideEffect({ applicationID, groups }))
+      .catch(apiService.defaultErrorHandler(possibleErrorTitle))
+  }
+)
+
+const renameGroupFromApplication = createReducerWithSideEffect(
+  "rename-group-from-application",
+  (state, payload: { applicationID: string, groupID: string, newName: string }) => {
+    if (state.applications !== undefined) {
+      if (state.applications[payload.applicationID].groups !== undefined) {
+        (state.applications[payload.applicationID].groups as Record<string, Group>)[payload.groupID].name = payload.newName;
+      }
+    }
+    state.loading = false
+  },
+  (
+    { state, sideEffect },
+    { apiService, applicationID, groupID, newName, possibleErrorTitle }: { apiService: ApiServices, applicationID: string, groupID: string, newName: string, possibleErrorTitle: string }
+  ) => {
+    state.loading = true
+    apiService.applications.groups.rename({ applicationId: applicationID, groupId: groupID, newName })
+      .then(() => sideEffect({ applicationID, groupID, newName }))
       .catch(apiService.defaultErrorHandler(possibleErrorTitle))
   }
 )
@@ -65,5 +86,5 @@ const removeGroupFromApplication = createReducerWithSideEffect(
   }
 )
 
-export const groupsReducers = [addGroup, updateGroupsApplication, removeGroupFromApplication]
+export const groupsReducers = [addGroup, listGroupsApplication, renameGroupFromApplication, removeGroupFromApplication]
 

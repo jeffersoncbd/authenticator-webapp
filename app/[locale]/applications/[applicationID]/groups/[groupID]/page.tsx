@@ -41,7 +41,7 @@ const Group: React.FC<Properties> = ({ params: { applicationID, groupID } }) => 
   useEffect(() => {
     if (group === null && token !== null) {
       action({
-        type: 'update-groups-application',
+        type: 'list-groups-application',
         payload: { apiService, applicationID, possibleErrorTitle: t('possibleErrorTitleOnList') }
       })
     }
@@ -65,6 +65,10 @@ const Group: React.FC<Properties> = ({ params: { applicationID, groupID } }) => 
         { label: applicationName, href: `/applications/${applicationID}?tab=groups` },
         { label: group.name }
       ]}
+      handleEditTitle={(newTitle) => action({
+        type: "rename-group-from-application",
+        payload: { apiService, applicationID, groupID, newName: newTitle, possibleErrorTitle: t('rename.possibleErrorTitle') }
+      })}
     >
       <CopyToClipBoard reference={groupID}>
         {groupID}
@@ -73,7 +77,7 @@ const Group: React.FC<Properties> = ({ params: { applicationID, groupID } }) => 
         className="self-center flex-1 min-[350px]:flex-none min-[350px]:w-[200px] bg-red-600 hover:bg-red-500 dark:bg-red-600 dark:hover:bg-red-700"
         onClick={() => setGroupExclusion(groupID)}
       >
-        Excluir este grupo
+        {t('delete.buttonTriggerLabel')}
       </Button>
       <DeleteGroup
         applicationID={applicationID}
