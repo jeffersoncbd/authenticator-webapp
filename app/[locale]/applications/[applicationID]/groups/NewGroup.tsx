@@ -9,8 +9,12 @@ import { useTranslations } from "next-intl"
 import { useRef } from "react"
 import { z } from "zod"
 
-const NewApplication: React.FC = () => {
-  const t = useTranslations('pages.applications.new')
+interface Properties {
+  applicationId: string
+}
+
+const NewGroup: React.FC<Properties> = ({ applicationId }) => {
+  const t = useTranslations('pages.applications.view.tabs.groups.new')
   const action = useStoreActions()
   const apiService = useApiService()
 
@@ -22,7 +26,7 @@ const NewApplication: React.FC = () => {
 
   return (
     <Dialog>
-      <DialogTrigger asChild={true}>
+      <DialogTrigger asChild>
         <Button className="flex-1 min-[350px]:flex-none min-[350px]:w-[200px]">
           {t('buttonTriggerLabel')}
         </Button>
@@ -32,10 +36,7 @@ const NewApplication: React.FC = () => {
           <DialogTitle>{t('title')}</DialogTitle>
         </DialogHeader>
         <Form.Container onSubmit={(values) => {
-          action({
-            type: "add-application",
-            payload: { apiService, name: values.name, possibleErrorTitle: t('possibleErrorTitle') }
-          })
+          action({ type: 'add-group', payload: { apiService, applicationId, groupName: values.name, possibleErrorTitle: t('possibleErrorTitle') } })
           Form.setValue('name', '')
           closeRef.current?.click()
         }}>
@@ -54,5 +55,4 @@ const NewApplication: React.FC = () => {
   )
 }
 
-export default NewApplication
-
+export default NewGroup

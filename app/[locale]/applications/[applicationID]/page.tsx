@@ -9,7 +9,7 @@ import { useApiService } from "@/services/api"
 import { useStoreActions, useStoreSelects } from "@/store"
 import { useTranslations } from "next-intl"
 import { useEffect } from "react"
-import GroupsList from "./GroupsList"
+import GroupsList from "./groups/GroupsList"
 import { useSearchParams } from "next/navigation"
 
 interface Properties {
@@ -24,6 +24,7 @@ const Application: React.FC<Properties> = ({ params: { applicationID } }) => {
   const apiService = useApiService()
 
   const application = useStoreSelects(s => {
+    console.log('select')
     if (s.applications === undefined) {
       return null
     }
@@ -33,12 +34,12 @@ const Application: React.FC<Properties> = ({ params: { applicationID } }) => {
   useEffect(() => {
     if (application !== undefined && application !== null && application.groups === undefined) {
       action({
-        type: 'update-groups-application',
+        type: 'list-groups-application',
         payload: { applicationID, apiService, possibleErrorTitle: t('view.tabs.groups.possibleErrorTitleOnList') }
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [application])
+  }, [JSON.stringify(application)])
 
   if (application === null) {
     return <Loading />
