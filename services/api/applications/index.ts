@@ -17,6 +17,13 @@ export function applications(service: AxiosInstance) {
       const response = await service.post<BasicCreation>("/applications", data);
       return response.data;
     },
+    rename: async (data: { applicationId: string, newName: string }) => {
+      const response = await service.patch<BasicCreation>(
+        `/applications/${data.applicationId}`,
+        { newName: data.newName }
+      );
+      return response.data;
+    },
     groups: groups(service),
     users: users(service),
   };

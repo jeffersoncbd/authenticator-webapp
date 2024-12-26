@@ -57,6 +57,10 @@ const Application: React.FC<Properties> = ({ params: { applicationID } }) => {
         { label: t('title'), href: '/applications' },
         { label: application.name }
       ]}
+      handleEditTitle={(newTitle) => action({
+        type: 'rename-application',
+        payload: { applicationID, newName: newTitle, apiService, possibleErrorTitle: t('view.rename.possibleErrorTitle') }
+      })}
     >
       <CopyToClipBoard reference={application.id}>
         {application.id}

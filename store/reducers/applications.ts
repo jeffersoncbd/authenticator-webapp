@@ -43,4 +43,23 @@ const updateApplications = createReducerWithSideEffect(
   }
 );
 
-export const applicationsReducers = [addApplication, updateApplications];
+const renameApplication = createReducerWithSideEffect(
+  "rename-application",
+  (state, payload: { applicationID: string, newName: string }) => {
+    if (state.applications !== undefined) {
+      state.applications[payload.applicationID].name = payload.newName;
+    }
+    state.loading = false
+  },
+  (
+    { state, sideEffect },
+    { apiService, applicationID, newName, possibleErrorTitle }: { apiService: ApiServices, applicationID: string, newName: string, possibleErrorTitle: string }
+  ) => {
+    state.loading = true
+    apiService.applications.rename({ applicationId: applicationID, newName })
+      .then(() => sideEffect({ applicationID, newName }))
+      .catch(apiService.defaultErrorHandler(possibleErrorTitle))
+  }
+)
+
+export const applicationsReducers = [addApplication, updateApplications, renameApplication];

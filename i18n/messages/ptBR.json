@@ -39,6 +39,9 @@
         "possibleErrorTitle": "Falha ao tentar adicionar aplicação"
       },
       "view": {
+        "rename": {
+          "possibleErrorTitle": "Falha ao tentar renomear aplicação"
+        },
         "tabs": {
           "groups": {
             "title": "Grupos",

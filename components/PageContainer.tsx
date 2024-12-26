@@ -52,7 +52,7 @@ const PageContainer: React.FC<Properties> = (props) => {
           </BreadcrumbList>
         </Breadcrumb>
       )}
-      {props.handleEditTitle !== undefined && !editTitle ? (
+      {props.handleEditTitle === undefined || (!editTitle && props.handleEditTitle !== undefined) ? (
         <H2 className="flex gap-4 justify-center items-center">
           {props.title}
           {props.handleEditTitle !== undefined &&
